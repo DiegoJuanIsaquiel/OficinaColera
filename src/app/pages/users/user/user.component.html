@@ -1,0 +1,50 @@
+<div class="col-md-12 px-0">
+  <nb-card [nbSpinner]="showLoading">
+    <nb-card-header>
+      {{ isUpdate ? 'Atualizar' : 'Criar' }} um usuário
+    </nb-card-header>
+    <nb-card-body>
+      <form (ngSubmit)="onSubmit()" [formGroup]="formGroup">
+        <div class="w-100 d-flex flex-wrap">
+          <div class="col-12 col-md-4">
+            <label for="email">E-mail</label>
+            <input id="email" formControlName="email" nbInput fullWidth shape="rectangle" placeholder="Digite o e-mail" type="email">
+          </div>
+
+          <div class="col-12 col-md-4 mt-3 mt-md-0" *ngIf="!isUpdate">
+            <label for="password">Senha</label>
+            <input id="password" formControlName="password" nbInput fullWidth shape="rectangle" placeholder="Digite a senha" type="text">
+          </div>
+
+          <div class="col-12 col-md-4 mt-3 mt-md-0">
+            <label>Permissão</label>
+            <nb-select fullWidth placeholder="Selecione a permissão" formControlName="roles">
+              <nb-option value="none">Nenhuma</nb-option>
+              <nb-option value="user">Usuário</nb-option>
+              <nb-option value="admin">Administrador</nb-option>
+            </nb-select>
+          </div>
+
+          <ng-container *ngIf="isUpdate">
+            <div class="col-12 mt-3">
+              <nb-toggle formControlName="isActive">Habilitar o acesso ao dashboard</nb-toggle>
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="col d-flex flex-column flex-sm-row flex-sm-grow-0 mt-5">
+          <button nbButton
+                  status="basic"
+                  outline
+                  routerLink="/pages/users" type="button">Voltar
+          </button>
+          <button [disabled]="formGroup.status === 'INVALID'"
+                  nbButton
+                  status="success"
+                  outline
+                  class="mt-3 mt-md-0 ml-sm-auto">{{ isUpdate ? 'Atualizar' : 'Criar' }}</button>
+        </div>
+      </form>
+    </nb-card-body>
+  </nb-card>
+</div>

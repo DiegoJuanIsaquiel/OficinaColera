@@ -1,0 +1,23 @@
+:host, form {
+  height: 100%;
+  width: 100%;
+
+  background-size: cover;
+  background-image: url("~assets/images/facens.jpg");
+}
+
+.login {
+  nb-card {
+    max-width: 400px;
+  }
+
+  &--logo {
+    max-width: 100%;
+    height: 200px;
+  }
+
+  &--footer {
+    height: 3rem;
+    min-height: 3rem;
+  }
+}
