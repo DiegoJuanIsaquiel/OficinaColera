@@ -65,5 +65,4 @@ registerLocaleData(pt, 'pt-PT');
     AppComponent,
   ],
 })
-export class AppModule {
-}
+export class AppModule { }

@@ -5,6 +5,7 @@
 
 export const environment = {
   production: false,
+  hmr: false,
   keys: {
     token: 'TOKEN_PROXY_KEY',
     refreshToken: 'REFRESH_TOKEN_PROXY_KEY',

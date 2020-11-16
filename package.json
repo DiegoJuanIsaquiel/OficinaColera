@@ -5,6 +5,7 @@
     "ng": "ng",
     "conventional-changelog": "conventional-changelog",
     "start": "ng serve",
+    "hmr": "ng serve --configuration hmr",
     "build": "ng build",
     "build:prod": "npm run build -- --prod --aot",
     "deploy:aws": "node aws-deploy.js",
