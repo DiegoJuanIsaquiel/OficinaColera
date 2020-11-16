@@ -5,7 +5,7 @@ import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbDatepickerModule, NbDialogModule, NbMenuModule, NbSidebarModule, NbToastrModule, NbWindowModule } from '@nebular/theme';
+import { NbGlobalLogicalPosition, NbMenuModule, NbSidebarModule, NbToastrModule } from '@nebular/theme';
 
 import { environment } from '../environments/environment';
 import { CoreModule } from './@core/core.module';
@@ -34,12 +34,13 @@ registerLocaleData(pt, 'pt-PT');
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    NbToastrModule.forRoot({
+      duration: 5000,
+      destroyByClick: true,
+      limit: 3,
+    }),
     NbSidebarModule.forRoot(),
     NbMenuModule.forRoot(),
-    NbDatepickerModule.forRoot(),
-    NbDialogModule.forRoot(),
-    NbWindowModule.forRoot(),
-    NbToastrModule.forRoot(),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
     HttpAsyncModule.withConfig({
