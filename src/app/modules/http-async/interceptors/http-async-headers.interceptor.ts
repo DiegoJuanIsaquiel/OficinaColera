@@ -28,6 +28,15 @@ export class HttpAsyncHeadersInterceptor implements HttpInterceptor {
 
   //#endregion
 
+  //#region Public Static Properties
+
+  /**
+   * O header que pode ser passado para desativar esse interceptor
+   */
+  public static readonly DISABLE_HEADER: string = 'X-Disabled-HttpAsyncHeaders';
+
+  //#endregion
+
   //#region Public Methods
 
   /**
@@ -40,14 +49,20 @@ export class HttpAsyncHeadersInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
-    let headers = req.headers;
+    if (!req.headers.get(HttpAsyncHeadersInterceptor.DISABLE_HEADER)) {
+      let headers = req.headers;
 
-    for (const property in this.config.defaultHeaders)
-      headers = headers.set(property, this.config.defaultHeaders[property]);
+      for (const property in this.config.defaultHeaders)
+        headers = headers.set(property, this.config.defaultHeaders[property]);
 
-    req = req.clone({
-      headers,
-    });
+      req = req.clone({
+        headers,
+      });
+    } else {
+      req = req.clone({
+        headers: req.headers.delete(HttpAsyncHeadersInterceptor.DISABLE_HEADER),
+      });
+    }
 
     return next.handle(req);
   }

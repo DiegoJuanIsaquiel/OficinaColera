@@ -45,6 +45,13 @@ export class HttpAsyncService {
     return this.onHttpError.asObservable();
   }
 
+  /**
+   * Método que retorna a implementação nativa sem Wrappers
+   */
+  public getNativeClient(): HttpClient {
+    return this.http;
+  }
+
   //#endregion
 
   //#region Private Methods

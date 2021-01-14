@@ -56,20 +56,17 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
         const jwtPayload = decode(token);
         const refreshJwtPayload = decode(token);
 
-        const hourInMilliseconds = 1_000 * 60 * 60;
-        const dayInMilliseconds = hourInMilliseconds * 24;
+        const fiveMinutesInMilliseconds = 1_000 * 5;
+        const maxSafeExpiresDate = +new Date() + fiveMinutesInMilliseconds;
 
-        const currentDayResetedToMidnight = +new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate(), 0, 0, 0, 0);
-        const maxSafeExpiresDate = currentDayResetedToMidnight + dayInMilliseconds;
-
-        const expiresIn = jwtPayload.exp * 1000;
+        const expiresIn = +new Date(jwtPayload.exp * 1000);
         const shouldRefreshToken = maxSafeExpiresDate >= expiresIn;
 
         if (!shouldRefreshToken)
           return of(true);
 
-        const refreshExpiresIn = refreshJwtPayload.exp * 1000;
-        const maxSafeRefreshExpiresDate = currentDayResetedToMidnight + hourInMilliseconds;
+        const refreshExpiresIn = +new Date(refreshJwtPayload.exp * 1000);
+        const maxSafeRefreshExpiresDate = +new Date() + fiveMinutesInMilliseconds;
 
         const canRefreshToken = maxSafeRefreshExpiresDate >= refreshExpiresIn;
 

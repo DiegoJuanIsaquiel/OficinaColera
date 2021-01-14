@@ -28,6 +28,15 @@ export class BearerTokenInterceptor implements HttpInterceptor {
 
   //#endregion
 
+  //#region Public Static Properties
+
+  /**
+   * O header que pode ser passado para desativar esse interceptor
+   */
+  public static readonly DISABLE_HEADER: string = 'X-Disabled-BearerToken';
+
+  //#endregion
+
   //#region Public Methods
 
   /**
@@ -40,16 +49,22 @@ export class BearerTokenInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
-    const token = localStorage.getItem(this.config.bearerTokenKey);
+    if (!req.headers.get(BearerTokenInterceptor.DISABLE_HEADER)) {
+      const token = localStorage.getItem(this.config.bearerTokenKey);
 
-    if (!token)
-      return next.handle(req);
+      if (!token)
+        return next.handle(req);
 
-    const headers = req.headers.set('Authorization', token);
+      const headers = req.headers.set('Authorization', token);
 
-    req = req.clone({
-      headers,
-    });
+      req = req.clone({
+        headers,
+      });
+    } else {
+      req = req.clone({
+        headers: req.headers.delete(BearerTokenInterceptor.DISABLE_HEADER),
+      });
+    }
 
     return next.handle(req);
   }
