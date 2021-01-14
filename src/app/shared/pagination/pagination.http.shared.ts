@@ -194,7 +194,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
   public async onClickToToggleIsActive(entity: BaseCrudProxy): Promise<void> {
     const user = getCurrentUser();
 
-    if (entity.id === user.id)
+    if (this.route === '/users' && entity.id === user.id)
       return void this.toast.danger('Você não pode desativar o seu próprio usuário!', 'Oops...');
 
     this.isLoadingResults = true;
