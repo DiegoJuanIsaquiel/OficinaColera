@@ -4,7 +4,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
-import { NbButtonModule, NbCardModule, NbSpinnerModule } from '@nebular/theme';
+import { NbButtonModule, NbCardModule, NbInputModule, NbSpinnerModule } from '@nebular/theme';
 
 import { ListUsersComponent } from './list-users.component';
 
@@ -18,6 +18,7 @@ import { ListUsersComponent } from './list-users.component';
     MatPaginatorModule,
     RouterModule,
     NbSpinnerModule,
+    NbInputModule,
   ],
   exports: [
     ListUsersComponent,

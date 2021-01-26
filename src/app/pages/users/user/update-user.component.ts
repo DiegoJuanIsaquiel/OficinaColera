@@ -72,7 +72,7 @@ export class UpdateUserComponent extends BaseUserComponent implements OnInit {
   //#region Public Methods
 
   /**
-   * Método chamado ao atualizar um produto
+   * Método chamado ao atualizar uma entidade
    */
   public async onSubmit(): Promise<void> {
     this.showLoading = true;
