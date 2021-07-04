@@ -1,15 +1,13 @@
 var child_process = require('child_process');
 
-const profile = 'aws_liga';
-const bucketName = '';
-const cloudFrontUrl = '';
-const distributionId = '';
+const profile = process.env.AWS_PROFILE;
+const bucketName = process.env.AWS_BUCKET_NAME;
+const distributionId = process.env.AWS_CLOUDFRONT_ID;
+const buildConfiguration = process.env.BUILD_CONFIG
 const buildFolder = 'dist/';
 
 /*Build your web app -- Command to build web app*/
-const buildWebAppCommand = `ng build --prod --configuration=production --aot --vendor-chunk --build-optimizer --base-href https://${ bucketName }/ --deploy-url https://${ cloudFrontUrl }/`;
-/**To optimize upload of icons and remove unused icons */
-const removeScssFolder = `rm -r dist/assets/scss`;
+const buildWebAppCommand = `ng build --configuration=${ buildConfiguration } --aot --vendor-chunk --build-optimizer`;
 /*upload files to the bucket with cache headers*/
 const s3UploadCommand = `aws --profile ${ profile } s3 sync --delete  ${ buildFolder } s3://${ bucketName }  --acl public-read --cache-control max-age=86400000,public`;
 /*remove cache header of html files*/
@@ -23,9 +21,6 @@ function deploy() {
     console.log('Starting Building App');
     child_process.execSync(buildWebAppCommand);
     console.log('App Build Finished');
-    console.log('Removing SCSS Folder');
-    child_process.execSync(removeScssFolder);
-    console.log('Removed SVG Folder');
     console.log('Starting Upload Files');
     child_process.execSync(s3UploadCommand);
     console.log('Files Upload Finished');
