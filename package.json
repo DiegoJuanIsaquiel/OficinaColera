@@ -1,5 +1,5 @@
 {
-  "name": "@h4ad/backoffice",
+  "name": "@liga/backoffice",
   "version": "6.0.0",
   "scripts": {
     "ng": "ng",
@@ -67,7 +67,6 @@
     "stylelint": "^13.7.2",
     "ts-node": "3.2.2",
     "tslint": "~6.1.0",
-    "tslint-language-service": "^0.9.9",
     "typescript": "3.9.7"
   }
 }
