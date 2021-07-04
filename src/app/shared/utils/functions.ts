@@ -101,7 +101,7 @@ export function isAdmin(token: string): boolean {
   if (!token || jwt.isTokenExpired(token))
     return false;
 
-  const tokenPayload = decode(token);
+  const tokenPayload: { roles: string } = decode(token);
 
   if (typeof tokenPayload.roles !== 'string')
     return false;

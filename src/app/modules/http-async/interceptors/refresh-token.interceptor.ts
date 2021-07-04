@@ -53,8 +53,10 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
         if (!token)
           return of(true);
 
-        const jwtPayload = decode(token);
-        const refreshJwtPayload = decode(token);
+        type JWTDecoded = { exp: number };
+
+        const jwtPayload: JWTDecoded = decode(token);
+        const refreshJwtPayload: JWTDecoded = decode(token);
 
         const fiveMinutesInMilliseconds = 1_000 * 5;
         const maxSafeExpiresDate = +new Date() + fiveMinutesInMilliseconds;
