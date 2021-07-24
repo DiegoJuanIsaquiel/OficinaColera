@@ -42,6 +42,15 @@ export class RetryInterceptor implements HttpInterceptor {
           mergeMap((error: HttpErrorResponse, i) => {
             const retryAttempt = i;
 
+            if (error.status === 429) {
+              const retryAfterHeader = 'X-RateLimit-Reset';
+              const retryAfterMinDelay = (+new Date() / 1000) + 10;
+              const retryAfter = Math.min(retryAfterMinDelay, error.headers.has(retryAfterHeader) ? Number(error.headers.get(retryAfterHeader)) : retryAfterMinDelay);
+              const retryInMs = Math.abs((+new Date(retryAfter * 1000) - +new Date()));
+
+              return timer(retryInMs);
+            }
+
             if (error.status >= 100 && error.status < 500)
               return throwError(error);
 
