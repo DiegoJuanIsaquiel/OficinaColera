@@ -1,6 +1,6 @@
 import { registerLocaleData } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
-import pt from '@angular/common/locales/pt-PT';
+import ptBr from '@angular/common/locales/pt';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -21,7 +21,7 @@ import { RetryInterceptor } from './modules/http-async/interceptors/retry.interc
 import { IsOfflineInterceptor } from './modules/network/interceptors/is-offline.interceptor';
 import { NetworkModule } from './modules/network/network.module';
 
-registerLocaleData(pt, 'pt-PT');
+registerLocaleData(ptBr);
 
 @NgModule({
   declarations: [
@@ -54,7 +54,7 @@ registerLocaleData(pt, 'pt-PT');
     NetworkModule,
   ],
   providers: [
-    { provide: LOCALE_ID, useValue: 'pt-PT' },
+    { provide: LOCALE_ID, useValue: 'pt' },
     { provide: HTTP_INTERCEPTORS, useClass: IsOfflineInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: HttpAsyncHeadersInterceptor, multi: true },
