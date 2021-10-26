@@ -231,6 +231,6 @@ export function createCrudParams<T>(params: CrudRequestParams<T>): string {
  * @param endpoint O endpoint
  * @param params Os parâmetros
  */
-export function createCrudRequest<T>(endpoint: string, params: CrudRequestParams<T>): string {
+export function createCrudUrl<T>(endpoint: string, params: CrudRequestParams<T> = {}): string {
   return endpoint + '?' + createCrudParams<T>(params);
 }
