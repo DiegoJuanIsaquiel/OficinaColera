@@ -35,12 +35,15 @@ export interface CrudRequestParams<T> {
 
 }
 
+/**
+ * Representa o nome de uma coluna
+ */
 export type CrudRequestField<T> = Extract<keyof T, string> | string;
 
 /**
  * Representa um valor primitivo aceito em um filtro
  */
-export type CrudRequestPrimitiveValue = string | number | boolean;
+export type CrudRequestPrimitiveValue = string | number | boolean | Date;
 
 /**
  * Representa os operadores lógicos de um filtro
@@ -229,5 +232,5 @@ export function createCrudParams<T>(params: CrudRequestParams<T>): string {
  * @param params Os parâmetros
  */
 export function createCrudRequest<T>(endpoint: string, params: CrudRequestParams<T>): string {
-  return endpoint + '?' + createCrudParams(params);
+  return endpoint + '?' + createCrudParams<T>(params);
 }
