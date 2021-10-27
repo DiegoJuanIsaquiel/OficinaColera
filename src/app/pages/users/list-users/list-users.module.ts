@@ -4,7 +4,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
-import { NbButtonModule, NbCardModule, NbInputModule, NbSpinnerModule } from '@nebular/theme';
+import { NbSecurityModule } from '@nebular/security';
+import { NbButtonModule, NbCardModule, NbInputModule, NbPopoverModule, NbSpinnerModule } from '@nebular/theme';
+import { AlertDeleteModalModule } from '../../../components/alert-delete-modal/alert-delete-modal.component';
 
 import { ListUsersComponent } from './list-users.component';
 
@@ -19,6 +21,9 @@ import { ListUsersComponent } from './list-users.component';
     RouterModule,
     NbSpinnerModule,
     NbInputModule,
+    AlertDeleteModalModule,
+    NbSecurityModule,
+    NbPopoverModule,
   ],
   exports: [
     ListUsersComponent,

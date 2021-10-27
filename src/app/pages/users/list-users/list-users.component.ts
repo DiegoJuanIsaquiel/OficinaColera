@@ -5,6 +5,7 @@ import { NbToastrService } from '@nebular/theme';
 
 import { UserProxy } from '../../../models/proxys/user.proxy';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
+import { UserService } from '../../../services/user/user.service';
 import { PaginationHttpShared } from '../../../shared/pagination/pagination.http.shared';
 
 //#endregion
@@ -27,8 +28,9 @@ export class ListUsersComponent extends PaginationHttpShared<UserProxy> {
   constructor(
     toast: NbToastrService,
     http: HttpAsyncService,
+    user: UserService,
   ) {
-    super(toast, http,
+    super(toast, http, user,
       '/users',
       ['email', 'createdAt', 'updatedAt', 'actions'],
       ['email', 'createdAt', 'updatedAt', 'roles', 'isActive'],

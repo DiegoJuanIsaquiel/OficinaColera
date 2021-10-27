@@ -13,7 +13,7 @@ import { catchError, concatAll, map } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
 import { TokenProxy } from '../../../models/proxys/token.proxy';
-import { getCurrentUser } from '../../../shared/utils/functions';
+import { UserService } from '../../../services/user/user.service';
 
 //#endregion
 
@@ -33,6 +33,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
   constructor(
     private readonly router: Router,
     private readonly toast: NbToastrService,
+    private readonly user: UserService,
   ) { }
 
   //#endregion
@@ -43,7 +44,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
    * Método que intercepta a requisição
    */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const user = getCurrentUser();
+    const user = this.user.getCurrentUser();
 
     if (!user)
       return next.handle(req);

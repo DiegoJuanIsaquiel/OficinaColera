@@ -18,11 +18,11 @@ export class BaseUserComponent {
    * Construtor padrão
    */
   constructor(
-    protected formBuilder: FormBuilder,
-    protected route: ActivatedRoute,
-    protected http: HttpAsyncService,
+    protected readonly formBuilder: FormBuilder,
+    protected readonly route: ActivatedRoute,
+    protected readonly http: HttpAsyncService,
   ) {
-    this.backUrl = '/pages/users';
+    this.backUrl = this.route.snapshot.queryParamMap.get('backUrl') || '/pages/users';
     this.isUpdate = route.snapshot.paramMap.has('entityId');
 
     this.formGroup = formBuilder.group({

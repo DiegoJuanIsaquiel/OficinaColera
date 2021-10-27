@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
 
 import { environment } from '../../../environments/environment';
+import { UserService } from '../../services/user/user.service';
 
 //#endregion
 
@@ -21,7 +22,8 @@ export class AuthenticateGuard implements CanActivate {
    * Construtor padrão
    */
   constructor(
-    private readonly router: Router,
+    protected readonly router: Router,
+    protected readonly user: UserService,
   ) { }
 
   //#endregion
@@ -31,10 +33,12 @@ export class AuthenticateGuard implements CanActivate {
    */
   public async canActivate(route: ActivatedRouteSnapshot, _: RouterStateSnapshot) {
     const shouldLogout = route.queryParamMap.get('shouldLogout');
-    const { unprotectedRoute, protectedRoute, routeToRedirect } = route.data || { };
+    const { unprotectedRoute, protectedRoute, routeToRedirect } = route.data || {};
 
-    if (shouldLogout)
+    if (shouldLogout) {
       localStorage.clear();
+      this.user.refreshCurrentUser();
+    }
 
     if (!routeToRedirect)
       return true;

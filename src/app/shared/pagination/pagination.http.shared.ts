@@ -1,6 +1,6 @@
 //#region Imports
 
-import { AfterViewInit, Component, Directive, ElementRef, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
+import { AfterViewInit, Directive, ElementRef, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -14,7 +14,8 @@ import { BaseCrudProxy } from '../../models/proxys/base/base-crud.proxy';
 import { CrudRequestResponseProxy } from '../../models/proxys/base/crud-request-response.proxy';
 import { AsyncResult } from '../../modules/http-async/models/async-result';
 import { HttpAsyncService } from '../../modules/http-async/services/http-async.service';
-import { getCrudErrors, getCurrentUser } from '../utils/functions';
+import { UserService } from '../../services/user/user.service';
+import { getCrudErrors } from '../utils/functions';
 
 //#endregion
 
@@ -31,8 +32,9 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
    * Construtor padrão
    */
   constructor(
-    protected toast: NbToastrService,
-    protected http: HttpAsyncService,
+    protected readonly toast: NbToastrService,
+    protected readonly http: HttpAsyncService,
+    protected readonly user: UserService,
     @Optional()
     protected route?: string,
     @Optional()
@@ -191,16 +193,16 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
    *
    * @param entity A entidade a ser alternada
    */
-  public async onClickToToggleIsActive(entity: BaseCrudProxy): Promise<void> {
-    const user = getCurrentUser();
+  public async onClickToDelete(entity: BaseCrudProxy): Promise<void> {
+    const user = this.user.getCurrentUser();
 
     if (this.route === '/users' && entity.id === user.id)
-      return void this.toast.danger('Você não pode desativar o seu próprio usuário!', 'Oops...');
+      return void this.toast.danger('Você não pode remover o seu próprio usuário!', 'Oops...');
 
     this.isLoadingResults = true;
 
-    const url = `${ this.route }/${ entity.id }/${ (entity.isActive ? 'disable' : 'enable') }`;
-    const { error } = await this.http.put<unknown>(url, {});
+    const url = `${ this.route }/${ entity.id }`;
+    const { error } = await this.http.delete<unknown>(url, {});
 
     this.isLoadingResults = false;
 
@@ -265,6 +267,60 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     };
 
     return { success: success.data };
+  }
+
+  /**
+   * Método que carrega todas as entidades a partir de uma página em específico até acabar
+   *
+   * @param page A página a ser carregada
+   * @param limit O limite de itens por página
+   * @param url Um URL customizado para realizar a requisição de pesquisa
+   */
+  protected async getAllPaginatedData(page: number = 0, limit = 200, url = this.route): Promise<AsyncResult<TProxy[]>> {
+    let query = new RequestQueryBuilder()
+      .select(this.entityColumns.map(key => String(key)))
+      .setPage(page + 1)
+      .setLimit(limit)
+      .setJoin(this.joins)
+      .setOffset(0)
+      .sortBy(this.sortBy)
+      .search({});
+
+    const search = this.searchInput?.nativeElement?.value || '';
+    const searchQuery = this.searchConditions && await this.searchConditions(search);
+
+    if (searchQuery) {
+      if (Array.isArray(searchQuery)) {
+        if (!search)
+          query = query.search(searchQuery[0]);
+        else
+          query = query.search(searchQuery[1]);
+      } else {
+        query = query.search(searchQuery);
+      }
+    }
+
+    const queryParams = query.query(true);
+
+    const { success, error } = await this.http.get<CrudRequestResponseProxy<TProxy>>(`${ url }${ url.includes('?') ? '&' : '?' }${ queryParams }`);
+
+    if (error) {
+      return { error };
+    }
+
+    const sessionQuestions = Array.isArray(success) ? success : success.data;
+
+    if (sessionQuestions.length !== limit)
+      return { success: sessionQuestions };
+
+    const { error: errorOnGetMore, success: moreSessionQuestions } = await this.getAllPaginatedData(page + 1);
+
+    if (errorOnGetMore)
+      return { error: errorOnGetMore };
+
+    return {
+      success: [...sessionQuestions, ...moreSessionQuestions],
+    };
   }
 
   /**

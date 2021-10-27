@@ -5,7 +5,8 @@ import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbGlobalLogicalPosition, NbMenuModule, NbSidebarModule, NbToastrModule } from '@nebular/theme';
+import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
+import { NbMenuModule, NbSidebarModule, NbToastrModule } from '@nebular/theme';
 
 import { environment } from '../environments/environment';
 import { CoreModule } from './@core/core.module';
@@ -20,6 +21,7 @@ import { RefreshTokenInterceptor } from './modules/http-async/interceptors/refre
 import { RetryInterceptor } from './modules/http-async/interceptors/retry.interceptor';
 import { IsOfflineInterceptor } from './modules/network/interceptors/is-offline.interceptor';
 import { NetworkModule } from './modules/network/network.module';
+import { RoleService } from './services/role/role.service';
 
 registerLocaleData(ptBr);
 
@@ -51,6 +53,28 @@ registerLocaleData(ptBr);
       },
       bearerTokenKey: environment.keys.token,
     }),
+    NbSecurityModule.forRoot({
+      accessControl: {
+        none: {
+          view: [],
+          update: [],
+          create: [],
+          remove: [],
+        },
+        user: {
+          view: [],
+          update: [],
+          create: [],
+          remove: [],
+        },
+        admin: {
+          view: '*',
+          create: '*',
+          remove: '*',
+          update: '*',
+        },
+      },
+    }),
     NetworkModule,
   ],
   providers: [
@@ -61,9 +85,10 @@ registerLocaleData(ptBr);
     { provide: HTTP_INTERCEPTORS, useClass: BearerTokenInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: RefreshTokenInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: RetryInterceptor, multi: true },
+    { provide: NbRoleProvider, useClass: RoleService },
   ],
   bootstrap: [
     AppComponent,
   ],
 })
-export class AppModule { }
+export class AppModule {}

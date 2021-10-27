@@ -33,12 +33,14 @@
         </div>
 
         <div class="col d-flex flex-column flex-sm-row flex-sm-grow-0 mt-5">
-          <button nbButton
-                  status="basic"
-                  outline
-                  routerLink="/pages/users" type="button">Voltar
-          </button>
+          <a nbButton
+             status="basic"
+             outline
+             [routerLink]="backUrl" type="button">Voltar
+          </a>
+
           <button [disabled]="formGroup.status === 'INVALID'"
+                  *nbIsGranted="isUpdate ? ['update', 'user'] : ['create', 'user']"
                   nbButton
                   status="success"
                   outline

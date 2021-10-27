@@ -7,7 +7,7 @@ import { NbToastrService } from '@nebular/theme';
 
 import { UserProxy } from '../../../models/proxys/user.proxy';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
-import { getCrudErrors, hasRole } from '../../../shared/utils/functions';
+import { getCrudErrors } from '../../../shared/utils/functions';
 import { BaseUserComponent } from './base-user.component';
 
 //#endregion
@@ -59,11 +59,7 @@ export class UpdateUserComponent extends BaseUserComponent implements OnInit {
       return await this.router.navigateByUrl(this.backUrl);
 
     this.formGroup.controls.email.setValue(entity.email);
-
-    const hasUser = hasRole(entity.permissions, 'user');
-    const hasUserAdmin = hasRole(entity.permissions, 'admin');
-
-    this.formGroup.controls.roles.setValue(hasUserAdmin ? 'admin' : hasUser ? 'user' : 'none');
+    this.formGroup.controls.roles.setValue(entity.permissions);
     this.formGroup.controls.isActive.setValue(entity.isActive);
   }
 

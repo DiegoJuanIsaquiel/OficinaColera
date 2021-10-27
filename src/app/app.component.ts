@@ -26,8 +26,8 @@ export class AppComponent implements OnInit {
   //#region LifeCycle Events
 
   /**
-  * Método executado ao iniciar o componente
-  */
+   * Método executado ao iniciar o componente
+   */
   public async ngOnInit(): Promise<void> {
     this.seoService.trackCanonicalChanges();
   }

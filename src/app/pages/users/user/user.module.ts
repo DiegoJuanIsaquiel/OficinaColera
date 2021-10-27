@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterModule } from '@angular/router';
+import { NbSecurityModule } from '@nebular/security';
 import { NbButtonModule, NbCardModule, NbFormFieldModule, NbInputModule, NbSelectModule, NbSpinnerModule, NbToggleModule } from '@nebular/theme';
 
 import { CreateUserComponent } from './create-user.component';
@@ -29,6 +30,7 @@ import { UpdateUserComponent } from './update-user.component';
     NbSelectModule,
     NbToggleModule,
     NbFormFieldModule,
+    NbSecurityModule,
   ],
   exports: [
     UpdateUserComponent,
