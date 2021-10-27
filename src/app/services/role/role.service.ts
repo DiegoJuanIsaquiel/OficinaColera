@@ -33,17 +33,17 @@ export class RoleService implements NbRoleProvider {
   /**
    * Método que retorna um observable com as permissões do usuário
    */
-  public getRole(): Observable<string> {
+  public getRole(): Observable<string[]> {
     return this.user.getCurrentUser$().pipe(
-      map(currentUser => currentUser?.permissions || 'none'),
+      map(currentUser => currentUser?.permissions?.split('|') || ['none']),
     );
   }
 
   /**
    * Método que retorna um observable com as permissões do usuário
    */
-  public getRoleSync(): string {
-    return this.user.getCurrentUser()?.permissions || 'none';
+  public getRoleSync(): string[] {
+    return this.user.getCurrentUser()?.permissions?.split('|') || ['none'];
   }
 
   //#endregion

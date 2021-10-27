@@ -32,9 +32,9 @@ export class AuthService {
    * Método que valida se o usuário pode realizar alguma ação
    */
   public isGranted(action: string, resource: string): boolean {
-    const role = this.role.getRoleSync();
+    const roles = this.role.getRoleSync();
 
-    return this.nbAcl.can(role, action, resource);
+    return roles.some(role => this.nbAcl.can(role, action, resource));
   }
 
   //#endregion
