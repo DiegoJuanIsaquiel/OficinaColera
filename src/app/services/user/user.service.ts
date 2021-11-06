@@ -32,7 +32,7 @@ export class UserService {
   /**
    * As informações do usuário atual
    */
-  public currentUser$: BehaviorSubject<UserProxy | null>;
+  private readonly currentUser$: BehaviorSubject<UserProxy | null>;
 
   //#endregion
 

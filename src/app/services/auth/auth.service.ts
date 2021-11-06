@@ -29,6 +29,17 @@ export class AuthService {
   //#region Public Methods
 
   /**
+   * Método que verifica se um usuário possui alguma role em específico
+   *
+   * @param role A role que desejam verificar
+   */
+  public hasRole(role: string): boolean {
+    const roles = this.role.getRoleSync();
+
+    return roles.includes(role);
+  }
+
+  /**
    * Método que valida se o usuário pode realizar alguma ação
    */
   public isGranted(action: string, resource: string): boolean {

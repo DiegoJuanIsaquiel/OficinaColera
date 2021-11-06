@@ -256,17 +256,17 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     if (error)
       return { error };
 
-    this.dataSource.paginator.pageIndex = success.page - 1;
-    this.dataSource.paginator.length = success.total;
-    this.dataSource.paginator.pageSize = success.count < this.pageSizeDefault ? this.pageSizeDefault : success.count;
+    this.dataSource.paginator.pageIndex = Array.isArray(success) ? 0 : success.page - 1;
+    this.dataSource.paginator.length = Array.isArray(success) ? success.length : success.total;
+    this.dataSource.paginator.pageSize = Array.isArray(success) ? success.length : success.count < this.pageSizeDefault ? this.pageSizeDefault : success.count;
 
     this.pageEvent = {
-      length: success.total,
-      pageSize: success.count < this.pageSizeDefault ? this.pageSizeDefault : success.count,
-      pageIndex: success.page - 1,
+      length: this.dataSource.paginator.length,
+      pageSize: this.dataSource.paginator.pageSize,
+      pageIndex: this.dataSource.paginator.pageIndex,
     };
 
-    return { success: success.data };
+    return { success: Array.isArray(success) ? success : success.data };
   }
 
   /**

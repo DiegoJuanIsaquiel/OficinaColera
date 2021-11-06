@@ -1,7 +1,7 @@
 /**
  * A interface que representa o response padrão de uma requisição com filtro
  */
-export interface CrudRequestResponseProxy<TProxy> {
+export type CrudRequestResponseProxy<TProxy> = TProxy [] | {
 
   /**
    * A quantidade de items que veio nessa requisição
