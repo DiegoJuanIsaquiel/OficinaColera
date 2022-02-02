@@ -2,14 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'ngx-footer',
-  styleUrls: ['./footer.component.scss'],
   templateUrl: './footer.component.html',
+  styleUrls: ['./footer.component.scss'],
 })
-export class FooterComponent {
-
-  /**
-   * O ano atual
-   */
-  public currentYear: number = new Date().getFullYear();
-
-}
+export class FooterComponent {}

@@ -7,12 +7,11 @@ import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
 
 import { LayoutService } from '../../../@core/utils';
+import { UserProxy } from '../../../models/proxys/user.proxy';
+import { UserService } from '../../../services/user/user.service';
 
 //#endregion
 
-/**
- * A classe que representa o componente de cabeçalho
- */
 @Component({
   selector: 'ngx-header',
   styleUrls: ['./header.component.scss'],
@@ -22,49 +21,39 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   //#region Constructor
 
-  /**
-   * Construtor padrão
-   */
   constructor(
     private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
     private layoutService: LayoutService,
     private breakpointService: NbMediaBreakpointsService,
+    private readonly userService: UserService,
     ) { }
 
   //#endregion
 
   //#region Private Properties
 
-  /**
-   * O evento para escutar e limpar as informações desse componente
-   */
   private destroy$: Subject<void> = new Subject<void>();
 
   //#endregion
 
   //#region Public Properties
 
-  /**
-   * As informações do sub-menu ao clicar na imagem do usuário
-   */
   public userMenu: NbMenuItem[] = [{ title: 'Sair', link: '/auth/login', queryParams: { shouldLogout: true } }];
 
-  /**
-   * Diz se deve manter a imagem apenas ou todas as informações do usuário
-   */
   public userPictureOnly: boolean = false;
+
+  public user: UserProxy;
 
   //#endregion
 
   //#region LifeCycle Events
 
-  /**
-   * Metodo executado ao inicializar o componente
-   */
   public ngOnInit(): void {
     const { xl } = this.breakpointService.getBreakpointsMap();
+
+    this.user = this.userService.getCurrentUser();
 
     this.themeService.onMediaQueryChange()
       .pipe(

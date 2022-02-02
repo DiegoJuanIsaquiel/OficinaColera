@@ -10,9 +10,6 @@ import { PaginationHttpShared } from '../../../shared/pagination/pagination.http
 
 //#endregion
 
-/**
- * A classe que representa a página que lista os usuários existentes
- */
 @Component({
   selector: 'ngx-list-users',
   templateUrl: './list-users.component.html',
@@ -22,18 +19,15 @@ export class ListUsersComponent extends PaginationHttpShared<UserProxy> {
 
   //#region Constructor
 
-  /**
-   * Construtor padrão
-   */
   constructor(
     toast: NbToastrService,
     http: HttpAsyncService,
     user: UserService,
   ) {
     super(toast, http, user,
-      '/users',
-      ['email', 'createdAt', 'updatedAt', 'actions'],
-      ['email', 'createdAt', 'updatedAt', 'roles', 'isActive'],
+      '/user',
+      ['name', 'email', 'createdAt', 'updatedAt', 'actions'],
+      ['name', 'email', 'createdAt', 'updatedAt', 'roles', 'isActive'],
       async search => (
         [
           {

@@ -16,7 +16,7 @@ export const environment = {
       login: '/auth/local',
     },
     users: {
-      me: '/users/me',
+      me: '/user/me',
     },
   },
 };

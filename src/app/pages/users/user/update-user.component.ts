@@ -13,20 +13,14 @@ import { BaseUserComponent } from './base-user.component';
 //#endregion
 
 @Component({
-  selector: 'ngx-update-sector',
+  selector: 'ngx-update-user',
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss'],
 })
-/**
- * A classe que representa a página para atualizar as informações de uma entidade
- */
 export class UpdateUserComponent extends BaseUserComponent implements OnInit {
 
-  //#region Construtor
+  //#region Constructor
 
-  /**
-   * Construtor padrão
-   */
   constructor(
     protected readonly router: Router,
     protected readonly toast: NbToastrService,
@@ -41,9 +35,6 @@ export class UpdateUserComponent extends BaseUserComponent implements OnInit {
 
   //#region LifeCycle Events
 
-  /**
-   * Método que é executado ao iniciar o componente
-   */
   public async ngOnInit(): Promise<void | boolean> {
     if (!this.isUpdate)
       return await this.router.navigateByUrl(this.backUrl);
@@ -51,7 +42,7 @@ export class UpdateUserComponent extends BaseUserComponent implements OnInit {
     this.showLoading = true;
 
     const entityId = this.route.snapshot.paramMap.get('entityId');
-    const { error, success: entity } = await this.http.get<UserProxy>(`/users/${ entityId }`);
+    const { error, success: entity } = await this.http.get<UserProxy>(`/user/${ entityId }`);
 
     this.showLoading = false;
 
@@ -59,7 +50,7 @@ export class UpdateUserComponent extends BaseUserComponent implements OnInit {
       return await this.router.navigateByUrl(this.backUrl);
 
     this.formGroup.controls.email.setValue(entity.email);
-    this.formGroup.controls.roles.setValue(entity.permissions);
+    this.formGroup.controls.roles.setValue(entity.roles);
     this.formGroup.controls.isActive.setValue(entity.isActive);
   }
 
@@ -67,15 +58,12 @@ export class UpdateUserComponent extends BaseUserComponent implements OnInit {
 
   //#region Public Methods
 
-  /**
-   * Método chamado ao atualizar uma entidade
-   */
   public async onSubmit(): Promise<void> {
     this.showLoading = true;
 
     const payload = this.formGroup.getRawValue();
     const entityId = this.route.snapshot.paramMap.get('entityId');
-    const { error } = await this.http.put<UserProxy>(`/users/${ entityId }`, payload);
+    const { error } = await this.http.put<UserProxy>(`/user/${ entityId }`, payload);
 
     this.showLoading = false;
 

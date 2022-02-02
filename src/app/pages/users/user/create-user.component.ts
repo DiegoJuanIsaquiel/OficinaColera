@@ -18,11 +18,8 @@ import { BaseUserComponent } from './base-user.component';
 })
 export class CreateUserComponent extends BaseUserComponent {
 
-  //#region Construtor
+  //#region Constructor
 
-  /**
-   * Construtor padrão
-   */
   constructor(
     protected readonly router: Router,
     protected readonly toast: NbToastrService,
@@ -37,14 +34,11 @@ export class CreateUserComponent extends BaseUserComponent {
 
   //#region Public Methods
 
-  /**
-   * Método que é chamado ao tentar cadastrar uma postagem
-   */
   public async onSubmit(): Promise<void> {
     this.showLoading = true;
 
     const payload = this.formGroup.getRawValue();
-    const { error } = await this.http.post(`/users`, payload);
+    const { error } = await this.http.post(`/user`, payload);
 
     this.showLoading = false;
 

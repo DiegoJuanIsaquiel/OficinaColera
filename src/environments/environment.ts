@@ -16,12 +16,12 @@ export const environment = {
     redirectToWhenUnauthenticated: '/auth/login',
   },
   api: {
-    baseUrl: 'http://localhost:3000',
+    baseUrl: 'https://liga-iquot-api-dev.herokuapp.com',
     auth: {
       login: '/auth/local',
     },
     users: {
-      me: '/users/me',
+      me: '/user/me',
     },
   },
 };

@@ -7,25 +7,20 @@ import { HttpAsyncService } from '../../../modules/http-async/services/http-asyn
 
 //#endregion
 
-/**
- * A classe base para a criação de uma entidade
- */
 export class BaseUserComponent {
 
   //#region Constructor
 
-  /**
-   * Construtor padrão
-   */
   constructor(
     protected readonly formBuilder: FormBuilder,
     protected readonly route: ActivatedRoute,
     protected readonly http: HttpAsyncService,
   ) {
-    this.backUrl = this.route.snapshot.queryParamMap.get('backUrl') || '/pages/users';
+    this.backUrl = this.route.snapshot.queryParamMap.get('backUrl') || '/pages/user';
     this.isUpdate = route.snapshot.paramMap.has('entityId');
 
     this.formGroup = formBuilder.group({
+      name: ['', Validators.required],
       email: ['', Validators.required],
       password: this.isUpdate ? [''] : ['', Validators.required],
       roles: ['', Validators.required],
@@ -37,24 +32,12 @@ export class BaseUserComponent {
 
   //#region Default Public Properties
 
-  /**
-   * Diz se está atualizando
-   */
   public isUpdate: boolean;
 
-  /**
-   * Diz se deve exibir um loading
-   */
   public showLoading: boolean;
 
-  /**
-   * O url no qual ele será redirecionado
-   */
   public backUrl: string;
 
-  /**
-   * As informações do form
-   */
   public formGroup: FormGroup;
 
   //endregion

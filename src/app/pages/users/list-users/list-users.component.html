@@ -47,7 +47,7 @@
                class="mx-2"
                *nbIsGranted="['update', 'user']"
                [routerLink]="['/pages/users/', element.id]">
-              Editar
+              <nb-icon icon="edit-outline"></nb-icon>
             </a>
 
             <button nbButton
@@ -58,7 +58,7 @@
                     [nbPopover]="deleteTemplate"
                     [nbPopoverContext]="element"
                     nbPopoverTrigger="click">
-              Remover
+              <nb-icon icon="trash-outline"></nb-icon>
             </button>
           </td>
         </ng-container>
