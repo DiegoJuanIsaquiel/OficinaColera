@@ -26,14 +26,13 @@ export class ListUsersComponent extends PaginationHttpShared<UserProxy> {
   ) {
     super(toast, http, user,
       environment.api.users.list,
-      ['name', 'email', 'createdAt', 'updatedAt', 'actions'],
-      ['name', 'email', 'createdAt', 'updatedAt', 'roles', 'isActive'],
+      ['email', 'createdAt', 'updatedAt', 'actions'],
+      ['email', 'createdAt', 'updatedAt', 'roles', 'isActive'],
       async search => (
         [
           {},
           {
             $or: [
-              { name: { $contL: search } },
               { email: { $contL: search } },
             ],
           },

@@ -7,11 +7,6 @@
       <form (ngSubmit)="onSubmit()" [formGroup]="formGroup">
         <div class="w-100 d-flex flex-wrap">
           <div class="col-12 col-md-4">
-            <label for="name">Nome</label>
-            <input id="name" formControlName="name" nbInput fullWidth shape="rectangle" placeholder="Digite o nome" type="text">
-          </div>
-
-          <div class="col-12 col-md-4">
             <label for="email">E-mail</label>
             <input id="email" formControlName="email" nbInput fullWidth shape="rectangle" placeholder="Digite o e-mail" type="email">
           </div>
@@ -23,7 +18,7 @@
 
           <div class="col-12 col-md-4 mt-3 mt-md-0">
             <label>Permissão</label>
-            <nb-select fullWidth placeholder="Selecione a permissão" formControlName="roles">
+            <nb-select fullWidth multiple placeholder="Selecione a permissão" formControlName="roles">
               <nb-option value="none">Nenhuma</nb-option>
               <nb-option value="user">Usuário</nb-option>
               <nb-option value="admin">Administrador</nb-option>

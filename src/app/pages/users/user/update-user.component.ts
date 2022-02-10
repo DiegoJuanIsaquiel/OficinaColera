@@ -50,7 +50,6 @@ export class UpdateUserComponent extends BaseUserComponent implements OnInit {
     if (error)
       return await this.router.navigateByUrl(this.backUrl);
 
-    this.formGroup.controls.name.setValue(entity.name);
     this.formGroup.controls.email.setValue(entity.email);
     this.formGroup.controls.roles.setValue(entity.roles);
     this.formGroup.controls.isActive.setValue(entity.isActive);

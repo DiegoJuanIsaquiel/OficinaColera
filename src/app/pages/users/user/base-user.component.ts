@@ -20,10 +20,9 @@ export class BaseUserComponent {
     this.isUpdate = route.snapshot.paramMap.has('entityId');
 
     this.formGroup = formBuilder.group({
-      name: ['', Validators.required],
       email: ['', Validators.required],
       password: this.isUpdate ? [''] : ['', Validators.required],
-      roles: ['', Validators.required],
+      roles: [['none'], Validators.required],
       isActive: [true],
     });
   }
