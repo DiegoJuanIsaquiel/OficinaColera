@@ -22,7 +22,7 @@ import { NbButtonModule, NbCardModule } from '@nebular/theme';
 export class AlertDeleteModalComponent {
 
   @Input()
-  public message: string;
+  public message!: string;
 
   @Output()
   public onDelete: EventEmitter<void> = new EventEmitter<void>();

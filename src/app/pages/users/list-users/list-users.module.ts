@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
 import { NbSecurityModule } from '@nebular/security';
 import { NbButtonModule, NbCardModule, NbIconModule, NbInputModule, NbPopoverModule, NbSpinnerModule } from '@nebular/theme';
 import { AlertDeleteModalModule } from '../../../components/alert-delete-modal/alert-delete-modal.component';
-
 import { ListUsersComponent } from './list-users.component';
 
 @NgModule({

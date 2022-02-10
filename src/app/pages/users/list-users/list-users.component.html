@@ -49,17 +49,6 @@
                [routerLink]="['/pages/users/', element.id]">
               <nb-icon icon="edit-outline"></nb-icon>
             </a>
-
-            <button nbButton
-                    *nbIsGranted="['remove', 'user']"
-                    status="danger"
-                    outline
-                    class="m-2"
-                    [nbPopover]="deleteTemplate"
-                    [nbPopoverContext]="element"
-                    nbPopoverTrigger="click">
-              <nb-icon icon="trash-outline"></nb-icon>
-            </button>
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

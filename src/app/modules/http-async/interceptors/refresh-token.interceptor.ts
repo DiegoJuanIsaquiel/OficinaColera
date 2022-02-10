@@ -7,8 +7,7 @@ import { NbToastrService } from '@nebular/theme';
 
 import decode from 'jwt-decode';
 
-import { Observable, of } from 'rxjs';
-import { fromPromise } from 'rxjs/internal-compatibility';
+import { from, Observable, of } from 'rxjs';
 import { catchError, concatAll, map } from 'rxjs/operators';
 
 import { environment } from '../../../../environments/environment';
@@ -76,7 +75,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
         if (!canRefreshToken)
           return of(false);
 
-        return fromPromise(this.tryRefreshToken(localStorage.getItem(environment.keys.refreshToken)));
+        return from(this.tryRefreshToken(localStorage.getItem(environment.keys.refreshToken) || ''));
       }),
       concatAll(),
     );
@@ -116,15 +115,15 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
     return await fetch(`${ environment.api.baseUrl }/auth/refresh`, {
       method: 'POST',
       headers: {
-        Authorization: refreshToken,
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
+        ['Authorization']: refreshToken,
+        ['Content-Type']: 'application/json',
+        ['Accept']: 'application/json',
       },
     } as unknown as Request)
       .then(async result => result.ok ? ({ success: await result.json() as unknown as TokenProxy, error: undefined }) : ({ success: undefined, error: new HttpErrorResponse({ error: 'A sua sessão expirou, você precisa logar novamente.', status: 401 }) }))
       .catch(error => ({ error, success: undefined }))
       .then(async result => {
-        if (result.error)
+        if (result.error || !result.success)
           return false;
 
         localStorage.setItem(environment.keys.token, result.success.token);

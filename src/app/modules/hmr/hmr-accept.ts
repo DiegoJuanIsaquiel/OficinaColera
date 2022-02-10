@@ -18,17 +18,20 @@ import { filter, take } from 'rxjs/operators';
 // tslint:disable: no-any
 declare const ng: any;
 declare const document: any;
+// eslint-disable-next-line @typescript-eslint/naming-convention
 declare const MutationObserver: any;
+// eslint-disable-next-line @typescript-eslint/naming-convention
 declare const KeyboardEvent: any;
+// eslint-disable-next-line @typescript-eslint/naming-convention
 declare const Event: any;
 
-export default function (mod: any): void {
-  if (!mod['hot']) {
+export default function(mod: any): void {
+  if (!mod.hot) {
     return;
   }
 
-  mod['hot'].accept();
-  mod['hot'].dispose(() => {
+  mod.hot.accept();
+  mod.hot.dispose(() => {
     if (typeof ng === 'undefined') {
       console.warn(`[NG HMR] Cannot find global 'ng'. Likely this is caused because scripts optimization is enabled.`);
 
@@ -122,7 +125,7 @@ function getAppRoot(): any {
   return appRoot;
 }
 
-function getToken<T>(appRoot: any, token: Type<T> ): T | undefined {
+function getToken<T>(appRoot: any, token: Type<T>): T | undefined {
   return typeof ng === 'object' && ng.getInjector(appRoot).get(token) || undefined;
 }
 

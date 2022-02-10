@@ -4,5 +4,4 @@ export type CrudRequestResponseProxy<TProxy> = TProxy [] | {
   page: number;
   pageCount: number;
   total: number;
-
-}
+};

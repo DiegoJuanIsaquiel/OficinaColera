@@ -42,17 +42,16 @@ export class UpdateUserComponent extends BaseUserComponent implements OnInit {
     this.showLoading = true;
 
     const entityId = this.route.snapshot.paramMap.get('entityId');
-    const url = environment.api.users.get.replace('{userId}', entityId);
+    const url = environment.api.users.get.replace('{userId}', entityId ?? '0');
     const { error, success: entity } = await this.http.get<UserProxy>(url);
 
     this.showLoading = false;
 
-    if (error)
+    if (error || !entity)
       return await this.router.navigateByUrl(this.backUrl);
 
-    this.formGroup.controls.name.setValue(entity.name);
     this.formGroup.controls.email.setValue(entity.email);
-    this.formGroup.controls.roles.setValue(entity.roles);
+    this.formGroup.controls.roles.setValue(entity.roles.join('|'));
     this.formGroup.controls.isActive.setValue(entity.isActive);
   }
 
@@ -64,8 +63,11 @@ export class UpdateUserComponent extends BaseUserComponent implements OnInit {
     this.showLoading = true;
 
     const payload = this.formGroup.getRawValue();
+
+    payload.roles = payload.roles.split('|');
+
     const entityId = this.route.snapshot.paramMap.get('entityId');
-    const url = environment.api.users.update.replace('{userId}', entityId);
+    const url = environment.api.users.update.replace('{userId}', entityId ?? '0');
     const { error } = await this.http.put<UserProxy>(url, payload);
 
     this.showLoading = false;

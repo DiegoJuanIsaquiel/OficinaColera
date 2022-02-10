@@ -3,7 +3,7 @@
 import { HttpEventType, HttpHeaders } from '@angular/common/http';
 import { Directive, OnDestroy } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
-import { fromBuffer } from 'file-type/core';
+import { fileTypeFromBuffer } from 'file-type/core';
 import { Observable, of, Subscription } from 'rxjs';
 import { catchError, filter, mergeMap, tap } from 'rxjs/operators';
 
@@ -81,7 +81,7 @@ export class HttpUploadFileShared implements OnDestroy {
   public async uploadFile(file: File, mediaType?: 'videos' | 'images' | 'avatars'): Promise<Observable<string>> {
     this.isUploadingFile = true;
 
-    const mimeType = await fromBuffer(await file.arrayBuffer()).then(info => info.mime || file.type).catch(() => file.type);
+    const mimeType = await fileTypeFromBuffer(await file.arrayBuffer()).then(info => info.mime || file.type).catch(() => file.type);
     const { error, success: credentials } = await this.http.post<PresignedPost>(`/medias/presigned/${ mediaType || this.defaultMediaType }`, { mimeType });
 
     if (error) {

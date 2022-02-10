@@ -26,12 +26,12 @@ export class RoleService implements NbRoleProvider {
 
   public getRole(): Observable<string[]> {
     return this.user.getCurrentUser$().pipe(
-      map(currentUser => currentUser?.roles?.split('|') || ['none']),
+      map(currentUser => currentUser?.roles || ['none']),
     );
   }
 
   public getRoleSync(): string[] {
-    return this.user.getCurrentUser()?.roles?.split('|') || ['none'];
+    return this.user.getCurrentUser()?.roles || ['none'];
   }
 
   //#endregion

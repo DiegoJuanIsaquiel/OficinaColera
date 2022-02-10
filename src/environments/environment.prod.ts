@@ -16,7 +16,11 @@ export const environment = {
       login: '/auth/local',
     },
     users: {
-      me: '/user/me',
+      list: '/users',
+      get: '/users/{userId}',
+      create: '/users',
+      update: '/users/{userId}',
+      me: '/users/me',
     },
   },
 };

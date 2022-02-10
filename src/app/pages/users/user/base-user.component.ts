@@ -20,10 +20,9 @@ export class BaseUserComponent {
     this.isUpdate = route.snapshot.paramMap.has('entityId');
 
     this.formGroup = formBuilder.group({
-      name: ['', Validators.required],
       email: ['', Validators.required],
       password: this.isUpdate ? [''] : ['', Validators.required],
-      roles: ['', Validators.required],
+      roles: ['none', Validators.required],
       isActive: [true],
     });
   }
@@ -32,12 +31,10 @@ export class BaseUserComponent {
 
   //#region Default Public Properties
 
-  public isUpdate: boolean;
-
-  public showLoading: boolean;
+  public isUpdate: boolean = false;
+  public showLoading: boolean = false;
 
   public backUrl: string;
-
   public formGroup: FormGroup;
 
   //endregion

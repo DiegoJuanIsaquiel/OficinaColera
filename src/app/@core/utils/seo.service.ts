@@ -1,7 +1,7 @@
 //#region Imports
 
 import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, OnDestroy, PLATFORM_ID, PlatformRef } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { NB_DOCUMENT } from '@nebular/theme';
 import { Subject } from 'rxjs';
@@ -17,8 +17,8 @@ export class SeoService implements OnDestroy {
 
   constructor(
     private router: Router,
-    @Inject(NB_DOCUMENT) document,
-    @Inject(PLATFORM_ID) platformId,
+    @Inject(NB_DOCUMENT) document: Document,
+    @Inject(PLATFORM_ID) platformId: PlatformRef,
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
     this.dom = document;
@@ -48,7 +48,7 @@ export class SeoService implements OnDestroy {
   /**
    * O Link criado para manter o SEO
    */
-  private linkCanonical: HTMLLinkElement;
+  private linkCanonical!: HTMLLinkElement;
 
   //#endregion
 

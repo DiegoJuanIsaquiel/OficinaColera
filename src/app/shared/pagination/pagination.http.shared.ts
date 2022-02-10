@@ -23,7 +23,6 @@ import { getCrudErrors } from '../utils/functions';
  * A classe que representa o conteúdo básico para uma página que irá conter páginação
  */
 @Directive()
-// tslint:disable-next-line:directive-class-suffix
 export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> implements OnInit, AfterViewInit, OnDestroy {
 
   //#region Constructor
@@ -36,11 +35,11 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     protected readonly http: HttpAsyncService,
     protected readonly user: UserService,
     @Optional()
-    protected route?: string,
+    protected route: string,
     @Optional()
-    public displayedColumns?: string[],
+    public displayedColumns: string[],
     @Optional()
-    protected entityColumns?: string[],
+    protected entityColumns: string[],
     @Optional()
     protected searchConditions?: (search: string) => Promise<SCondition | [SCondition, SCondition]>,
     @Optional()
@@ -60,19 +59,19 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
    * O elemento responsável pela paginação
    */
   @ViewChild(MatPaginator, { static: true })
-  public paginator: MatPaginator;
+  public paginator?: MatPaginator;
 
   /**
    * O element responsável pelo sorting
    */
   @ViewChild(MatSort, { static: true })
-  public sort: MatSort;
+  public sort?: MatSort;
 
   /**
    * O elemento responsável pela pesquisa
    */
   @ViewChild('input', { static: true })
-  public searchInput: ElementRef;
+  public searchInput?: ElementRef;
 
   //#endregion
 
@@ -86,7 +85,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
   /**
    * A lista de informações que serão paginadas
    */
-  public dataSource: MatTableDataSource<TProxy>;
+  public dataSource!: MatTableDataSource<TProxy>;
 
   /**
    * As informações de paginação
@@ -108,7 +107,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
   /**
    * A inscrição do evento para filtrar
    */
-  private searchInputSubscription: Subscription;
+  private searchInputSubscription?: Subscription;
 
   //#endregion
 
@@ -119,8 +118,8 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
    */
   public async ngOnInit(): Promise<void> {
     this.dataSource = new MatTableDataSource<TProxy>([]);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator ?? null;
+    this.dataSource.sort = this.sort ?? null;
 
     const { error, success } = await this.getValues<TProxy>(this.route, 0, this.pageSizeDefault);
 
@@ -158,7 +157,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
    * Método chamado quando o componente é destruido
    */
   public ngOnDestroy(): void {
-    this.searchInputSubscription && this.searchInputSubscription.unsubscribe();
+    this.searchInputSubscription?.unsubscribe();
   }
 
   //#endregion
@@ -178,14 +177,19 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     const value = this.searchInput && this.searchInput.nativeElement && this.searchInput.nativeElement.value || '';
     const searchValue = this.isString(value) && value.trim().toLocaleLowerCase() || '';
 
-    const { error, success } = await this.getValues<TProxy>(this.route, this.pageEvent.pageIndex || 0, this.pageEvent.pageSize || this.pageSizeDefault, searchValue);
+    const { error, success } = await this.getValues<TProxy>(
+      this.route,
+      this.pageEvent.pageIndex || 0,
+      this.pageEvent.pageSize || this.pageSizeDefault,
+      searchValue,
+    );
 
     this.isLoadingResults = false;
 
-    if (error)
+    if (error || !success)
       return void this.toast.danger(getCrudErrors(error)[0], 'Oops...');
 
-    this.dataSource.connect().next(success);
+    this.dataSource?.connect().next(success);
   }
 
   /**
@@ -195,6 +199,9 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
    */
   public async onClickToDelete(entity: BaseCrudProxy): Promise<void> {
     const user = this.user.getCurrentUser();
+
+    if (!user)
+      return;
 
     if (this.route === '/users' && entity.id === user.id)
       return void this.toast.danger('Você não pode remover o seu próprio usuário!', 'Oops...');
@@ -236,7 +243,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
       .sortBy(this.sortBy)
       .search({});
 
-    const searchQuery = this.searchConditions && await this.searchConditions(search);
+    const searchQuery = this.searchConditions && await this.searchConditions(search || '');
 
     if (searchQuery) {
       if (Array.isArray(searchQuery)) {
@@ -256,9 +263,12 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     if (error)
       return { error };
 
-    this.dataSource.paginator.pageIndex = Array.isArray(success) ? 0 : success.page - 1;
-    this.dataSource.paginator.length = Array.isArray(success) ? success.length : success.total;
-    this.dataSource.paginator.pageSize = Array.isArray(success) ? success.length : success.count < this.pageSizeDefault ? this.pageSizeDefault : success.count;
+    if (!this.dataSource?.paginator)
+      throw new Error('É necessário adicionar o componente de paginação para poder usar a busca de dados.');
+
+    this.dataSource.paginator.pageIndex = Array.isArray(success) ? 0 : success!.page - 1;
+    this.dataSource.paginator.length = Array.isArray(success) ? success.length : success!.total;
+    this.dataSource.paginator.pageSize = Array.isArray(success) ? success.length : success!.count < this.pageSizeDefault ? this.pageSizeDefault : success!.count;
 
     this.pageEvent = {
       length: this.dataSource.paginator.length,
@@ -266,7 +276,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
       pageIndex: this.dataSource.paginator.pageIndex,
     };
 
-    return { success: Array.isArray(success) ? success : success.data };
+    return { success: Array.isArray(success) ? success : success!.data };
   }
 
   /**
@@ -308,7 +318,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
       return { error };
     }
 
-    const sessionQuestions = Array.isArray(success) ? success : success.data;
+    const sessionQuestions = Array.isArray(success) ? success : success!.data;
 
     if (sessionQuestions.length !== limit)
       return { success: sessionQuestions };
@@ -319,7 +329,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
       return { error: errorOnGetMore };
 
     return {
-      success: [...sessionQuestions, ...moreSessionQuestions],
+      success: [...sessionQuestions, ...(moreSessionQuestions || [])],
     };
   }
 

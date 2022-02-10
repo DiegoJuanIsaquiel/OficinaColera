@@ -3,7 +3,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
-import { Observable, Subject } from 'rxjs';
+import { firstValueFrom, Observable, Subject } from 'rxjs';
 
 import { AsyncResult } from '../models/async-result';
 import { DefaultOptions, ExtraOptions } from '../models/http-options';
@@ -54,6 +54,78 @@ export class HttpAsyncService {
 
   //#endregion
 
+  //#region Async Restfull Methods
+
+  /**
+   * Envia uma requisição com o método GET de forma assincrona
+   *
+   * @param url Url para a requisição. Obs: Ele já é automaticamente combinado com a url base
+   * @param options As opções a mais que você pode passar para as requisições
+   */
+  public async get<T>(
+    url: string,
+    options?: DefaultOptions,
+  ): Promise<AsyncResult<T>> {
+    return await firstValueFrom(this.http.get<T>(url))
+      .then((data: T) => this.success(data))
+      .catch((error: HttpErrorResponse) => this.error<T>(error))
+      .then<AsyncResult<T>>((result: AsyncResult<T>) => result);
+  }
+
+  /**
+   * Envia uma requisição com o método POST
+   *
+   * @param url Url para a requisição. Obs: Ele já é automaticamente combinado com a url base
+   * @param payload Informações a serem enviadas para o servidor
+   * @param options As opções a mais que você pode passar para as requisições
+   */
+  public async post<T>(
+    url: string,
+    payload: object,
+    options?: ExtraOptions,
+  ): Promise<AsyncResult<T>> {
+    return await firstValueFrom(this.http.post<T>(url, payload, options))
+      .then((data: T) => this.success(data))
+      .catch((error: HttpErrorResponse) => this.error<T>(error))
+      .then<AsyncResult<T>>((result: AsyncResult<T>) => result);
+  }
+
+  /**
+   * Envia uma requisição com o método PUT
+   *
+   * @param url Url para a requisição. Obs: Ele já é automaticamente combinado com a url base
+   * @param payload Informações a serem enviadas para o servidor
+   * @param options As opções a mais que você pode passar para as requisições
+   */
+  public async put<T>(
+    url: string,
+    payload: object,
+    options?: ExtraOptions,
+  ): Promise<AsyncResult<T>> {
+    return await firstValueFrom(this.http.put<T>(url, payload, options))
+      .then((data: T) => this.success(data))
+      .catch((error: HttpErrorResponse) => this.error<T>(error))
+      .then<AsyncResult<T>>((result: AsyncResult<T>) => result);
+  }
+
+  /**
+   * Envia uma requisição com o método DELETE
+   *
+   * @param url Url para a requisição. Obs: Ele já é automaticamente combinado com a url base
+   * @param options As opções a mais que você pode passar para as requisições
+   */
+  public async delete<T>(
+    url: string,
+    options?: ExtraOptions,
+  ): Promise<AsyncResult<T>> {
+    return await firstValueFrom(this.http.delete<T>(url, options))
+      .then((data: T) => this.success(data))
+      .catch((error: HttpErrorResponse) => this.error<T>(error))
+      .then<AsyncResult<T>>((result: AsyncResult<T>) => result);
+  }
+
+  //#endregion
+
   //#region Private Methods
 
   /**
@@ -78,102 +150,6 @@ export class HttpAsyncService {
     return {
       error,
     };
-  }
-
-  //#endregion
-
-  //#region Async Restfull Methods
-
-  /**
-   * Envia uma requisição com o método GET de forma assincrona
-   *
-   * @param url Url para a requisição. Obs: Ele já é automaticamente combinado com a url base
-   * @param options As opções a mais que você pode passar para as requisições
-   */
-  public async get<T>(
-    url: string,
-    options?: DefaultOptions,
-  ): Promise<AsyncResult<T>> {
-    return await this.http.get<T>(url).toPromise()
-      .then((data: T) => {
-        return this.success(data);
-      })
-      .catch((error: HttpErrorResponse) => {
-        return this.error<T>(error);
-      })
-      .then<AsyncResult<T>>((result: AsyncResult<T>) => {
-        return result;
-      });
-  }
-
-  /**
-   * Envia uma requisição com o método POST
-   *
-   * @param url Url para a requisição. Obs: Ele já é automaticamente combinado com a url base
-   * @param payload Informações a serem enviadas para o servidor
-   * @param options As opções a mais que você pode passar para as requisições
-   */
-  public async post<T>(
-    url: string,
-    payload: object,
-    options?: ExtraOptions,
-  ): Promise<AsyncResult<T>> {
-    return await this.http.post<T>(url, payload, options).toPromise()
-      .then((data: T) => {
-        return this.success(data);
-      })
-      .catch((error: HttpErrorResponse) => {
-        return this.error<T>(error);
-      })
-      .then<AsyncResult<T>>((result: AsyncResult<T>) => {
-        return result;
-      });
-  }
-
-  /**
-   * Envia uma requisição com o método PUT
-   *
-   * @param url Url para a requisição. Obs: Ele já é automaticamente combinado com a url base
-   * @param payload Informações a serem enviadas para o servidor
-   * @param options As opções a mais que você pode passar para as requisições
-   */
-  public async put<T>(
-    url: string,
-    payload: object,
-    options?: ExtraOptions,
-  ): Promise<AsyncResult<T>> {
-    return await this.http.put<T>(url, payload, options).toPromise()
-      .then((data: T) => {
-        return this.success(data);
-      })
-      .catch((error: HttpErrorResponse) => {
-        return this.error<T>(error);
-      })
-      .then<AsyncResult<T>>((result: AsyncResult<T>) => {
-        return result;
-      });
-  }
-
-  /**
-   * Envia uma requisição com o método DELETE
-   *
-   * @param url Url para a requisição. Obs: Ele já é automaticamente combinado com a url base
-   * @param options As opções a mais que você pode passar para as requisições
-   */
-  public async delete<T>(
-    url: string,
-    options?: ExtraOptions,
-  ): Promise<AsyncResult<T>> {
-    return await this.http.delete<T>(url, options).toPromise()
-      .then((data: T) => {
-        return this.success(data);
-      })
-      .catch((error: HttpErrorResponse) => {
-        return this.error<T>(error);
-      })
-      .then<AsyncResult<T>>((result: AsyncResult<T>) => {
-        return result;
-      });
   }
 
   //#endregion
