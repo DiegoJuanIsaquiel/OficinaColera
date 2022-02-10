@@ -8,9 +8,6 @@ import { UserService } from '../../services/user/user.service';
 
 //#endregion
 
-/**
- * A classe que representa o guard que lida com a autenticação do APP
- */
 @Injectable({
   providedIn: 'root',
 })
@@ -18,9 +15,6 @@ export class AuthenticateGuard implements CanActivate {
 
   //#region Constructor
 
-  /**
-   * Construtor padrão
-   */
   constructor(
     protected readonly router: Router,
     protected readonly user: UserService,
@@ -28,9 +22,6 @@ export class AuthenticateGuard implements CanActivate {
 
   //#endregion
 
-  /**
-   * Método que diz se deve ativar a rota ou não
-   */
   public async canActivate(route: ActivatedRouteSnapshot, _: RouterStateSnapshot) {
     const shouldLogout = route.queryParamMap.get('shouldLogout');
     const { unprotectedRoute, protectedRoute, routeToRedirect } = route.data || {};

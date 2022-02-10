@@ -21,9 +21,6 @@ export class PagesComponent implements OnInit {
 
   //#region Constructor
 
-  /**
-   * Construtor padrão
-   */
   constructor(
     private readonly auth: AuthService,
   ) { }
@@ -32,18 +29,12 @@ export class PagesComponent implements OnInit {
 
   //#region Public Properties
 
-  /**
-   * A lista de menus existentes
-   */
   public menu: NbMenuItem[] = [];
 
   //#endregion
 
   //#region LifeCycle Events
 
-  /**
-   * Método executado ao iniciar o componente
-   */
   public async ngOnInit(): Promise<void> {
     const can = (permission: string, resource: string, menu: NbMenuItem) => {
       return this.auth.isGranted(permission, resource) ? [menu] : [];

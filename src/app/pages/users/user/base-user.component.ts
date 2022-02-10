@@ -16,7 +16,7 @@ export class BaseUserComponent {
     protected readonly route: ActivatedRoute,
     protected readonly http: HttpAsyncService,
   ) {
-    this.backUrl = this.route.snapshot.queryParamMap.get('backUrl') || '/pages/user';
+    this.backUrl = this.route.snapshot.queryParamMap.get('backUrl') || '/pages/users';
     this.isUpdate = route.snapshot.paramMap.has('entityId');
 
     this.formGroup = formBuilder.group({

@@ -15,9 +15,6 @@ import { getCrudErrors } from '../../../shared/utils/functions';
 
 //#endregion
 
-/**
- * A classe que representa a página de autenticação
- */
 @Component({
   selector: 'ngx-login',
   templateUrl: './login.component.html',
@@ -27,9 +24,6 @@ export class LoginComponent {
 
   //#region Constructor
 
-  /**
-   * Construtor padrão
-   */
   constructor(
     private readonly router: Router,
     private readonly route: ActivatedRoute,
@@ -52,19 +46,9 @@ export class LoginComponent {
 
   //#region Public Properties
 
-  /**
-   * A referencia do formulário
-   */
   public formGroup: FormGroup;
 
-  /**
-   * Diz se deve esconder a senha
-   */
   public hidePassword = true;
-
-  /**
-   * Diz se está realizando o login
-   */
   public isLoadingLogin: boolean;
 
   //#endregion

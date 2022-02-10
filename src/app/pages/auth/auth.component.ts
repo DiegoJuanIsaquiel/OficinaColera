@@ -4,9 +4,6 @@ import { Component } from '@angular/core';
 
 //#endregion
 
-/**
- * A classe que representa as informações de autenticação
- */
 @Component({
   selector: 'ngx-auth',
   template: `

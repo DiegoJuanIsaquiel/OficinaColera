@@ -4,7 +4,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
-
+import { environment } from '../../../../environments/environment';
 import { UserProxy } from '../../../models/proxys/user.proxy';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
 import { getCrudErrors } from '../../../shared/utils/functions';
@@ -42,13 +42,15 @@ export class UpdateUserComponent extends BaseUserComponent implements OnInit {
     this.showLoading = true;
 
     const entityId = this.route.snapshot.paramMap.get('entityId');
-    const { error, success: entity } = await this.http.get<UserProxy>(`/user/${ entityId }`);
+    const url = environment.api.users.get.replace('{userId}', entityId);
+    const { error, success: entity } = await this.http.get<UserProxy>(url);
 
     this.showLoading = false;
 
     if (error)
       return await this.router.navigateByUrl(this.backUrl);
 
+    this.formGroup.controls.name.setValue(entity.name);
     this.formGroup.controls.email.setValue(entity.email);
     this.formGroup.controls.roles.setValue(entity.roles);
     this.formGroup.controls.isActive.setValue(entity.isActive);
@@ -63,7 +65,8 @@ export class UpdateUserComponent extends BaseUserComponent implements OnInit {
 
     const payload = this.formGroup.getRawValue();
     const entityId = this.route.snapshot.paramMap.get('entityId');
-    const { error } = await this.http.put<UserProxy>(`/user/${ entityId }`, payload);
+    const url = environment.api.users.update.replace('{userId}', entityId);
+    const { error } = await this.http.put<UserProxy>(url, payload);
 
     this.showLoading = false;
 

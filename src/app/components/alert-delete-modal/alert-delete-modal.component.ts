@@ -6,9 +6,6 @@ import { NbButtonModule, NbCardModule } from '@nebular/theme';
 
 //#endregion
 
-/**
- * A classe que representa o componente que notifica o usuário antes de realizar a ação de deletar algo
- */
 @Component({
   selector: 'ngx-alert-delete-modal',
   template: `
@@ -24,21 +21,12 @@ import { NbButtonModule, NbCardModule } from '@nebular/theme';
 })
 export class AlertDeleteModalComponent {
 
-  /**
-   * A mensagem de alerta a ser exibida
-   */
   @Input()
   public message: string;
 
-  /**
-   * O evento lançado quando o usuário confirma a remoção
-   */
   @Output()
   public onDelete: EventEmitter<void> = new EventEmitter<void>();
 
-  /**
-   * O evento lançado quando o usuário quer fechar a modal
-   */
   @Output()
   public onClose: EventEmitter<void> = new EventEmitter<void>();
 

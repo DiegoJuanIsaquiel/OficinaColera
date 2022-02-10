@@ -10,7 +10,7 @@ const routes: Routes = [
     component: PagesComponent,
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'user', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
+      { path: 'users', loadChildren: () => import('./users/users.module').then(m => m.UsersModule) },
       { path: '**', loadChildren: () => import('../@theme/components/not-found/not-found.module').then(m => m.NotFoundModule) },
     ],
   },

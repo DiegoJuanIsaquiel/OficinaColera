@@ -2,7 +2,7 @@
 
 import { Component } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
-
+import { environment } from '../../../../environments/environment';
 import { UserProxy } from '../../../models/proxys/user.proxy';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
 import { UserService } from '../../../services/user/user.service';
@@ -25,16 +25,15 @@ export class ListUsersComponent extends PaginationHttpShared<UserProxy> {
     user: UserService,
   ) {
     super(toast, http, user,
-      '/user',
+      environment.api.users.list,
       ['name', 'email', 'createdAt', 'updatedAt', 'actions'],
       ['name', 'email', 'createdAt', 'updatedAt', 'roles', 'isActive'],
       async search => (
         [
-          {
-            email: { $contL: '' },
-          },
+          {},
           {
             $or: [
+              { name: { $contL: search } },
               { email: { $contL: search } },
             ],
           },
