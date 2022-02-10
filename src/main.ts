@@ -1,8 +1,8 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import hmrAccept from 'app/modules/hmr/hmr-accept';
 
 import { AppModule } from './app/app.module';
+import hmrAccept from './app/modules/hmr/hmr-accept';
 import { environment } from './environments/environment';
 
 if (environment.production) {
@@ -12,7 +12,7 @@ if (environment.production) {
 const bootstrap = () => platformBrowserDynamic().bootstrapModule(AppModule);
 
 if (environment.hmr) {
-  if (module['hot']) {
+  if ('hot' in module) {
     hmrAccept(module);
 
     bootstrap().catch(err => console.error(err));

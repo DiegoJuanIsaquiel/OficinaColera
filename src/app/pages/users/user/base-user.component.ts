@@ -22,7 +22,7 @@ export class BaseUserComponent {
     this.formGroup = formBuilder.group({
       email: ['', Validators.required],
       password: this.isUpdate ? [''] : ['', Validators.required],
-      roles: [['none'], Validators.required],
+      roles: ['none', Validators.required],
       isActive: [true],
     });
   }
@@ -31,12 +31,10 @@ export class BaseUserComponent {
 
   //#region Default Public Properties
 
-  public isUpdate: boolean;
-
-  public showLoading: boolean;
+  public isUpdate: boolean = false;
+  public showLoading: boolean = false;
 
   public backUrl: string;
-
   public formGroup: FormGroup;
 
   //endregion

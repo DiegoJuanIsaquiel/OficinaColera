@@ -31,7 +31,7 @@ export interface CrudRequestParams<T> {
   /**
    * A ordenação dos resultados
    */
-  sort?: { field: CrudRequestField<T>, order: 'ASC' | 'DESC' }[];
+  sort?: { field: CrudRequestField<T>; order: 'ASC' | 'DESC' }[];
 
 }
 
@@ -205,22 +205,22 @@ export function createCrudParams<T>(params: CrudRequestParams<T>): string {
   const qs: string[] = [];
 
   if (params.fields)
-    qs.push(`fields=${encodeURIComponent(params.fields.join(','))}`);
+    qs.push(`fields=${ encodeURIComponent(params.fields.join(',')) }`);
 
   if (params.search)
-    qs.push(`s=${encodeURIComponent(JSON.stringify(params.search))}`);
+    qs.push(`s=${ encodeURIComponent(JSON.stringify(params.search)) }`);
 
   if (params.limit)
-    qs.push(`limit=${params.limit}`);
+    qs.push(`limit=${ params.limit }`);
 
   if (params.page)
-    qs.push(`page=${params.page}`);
+    qs.push(`page=${ params.page }`);
 
   if (params.join)
-    params.join.forEach((j, i) => qs.push(`join[${i}]=${encodeURIComponent(j)}`));
+    params.join.forEach((j, i) => qs.push(`join[${ i }]=${ encodeURIComponent(j) }`));
 
   if (params.sort)
-    params.sort.forEach((s, i) => qs.push(`sort[${i}]=${encodeURIComponent(s.field + ',' + s.order)}`));
+    params.sort.forEach((s, i) => qs.push(`sort[${ i }]=${ encodeURIComponent(s.field + ',' + s.order) }`));
 
   return qs.join('&');
 }

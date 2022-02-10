@@ -33,6 +33,7 @@ export class BaseUrlInterceptor implements HttpInterceptor {
   /**
    * O header que pode ser passado para desativar esse interceptor
    */
+    // eslint-disable-next-line @typescript-eslint/naming-convention
   public static readonly DISABLE_HEADER: string = 'X-Disabled-BaseUrl';
 
   //#endregion

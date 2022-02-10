@@ -48,8 +48,8 @@ registerLocaleData(ptBr);
     HttpAsyncModule.withConfig({
       baseUrl: environment.api.baseUrl,
       defaultHeaders: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
+        ['Accept']: 'application/json',
+        ['Content-Type']: 'application/json',
       },
       bearerTokenKey: environment.keys.token,
     }),

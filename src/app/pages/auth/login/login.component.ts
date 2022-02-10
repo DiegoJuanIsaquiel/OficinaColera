@@ -49,7 +49,7 @@ export class LoginComponent {
   public formGroup: FormGroup;
 
   public hidePassword = true;
-  public isLoadingLogin: boolean;
+  public isLoadingLogin: boolean = false;
 
   //#endregion
 
@@ -66,7 +66,7 @@ export class LoginComponent {
     const { error, success } = await this.http.post<TokenProxy>(environment.api.auth.login, this.formGroup.getRawValue());
     this.isLoadingLogin = false;
 
-    if (error)
+    if (error || !success)
       return void this.toast.danger(getCrudErrors(error)[0], 'Oops...');
 
     localStorage.setItem(environment.keys.token, success.token);

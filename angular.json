@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-admin-demo": {
+    "backoffice": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -15,7 +15,8 @@
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "tsConfig": "src/tsconfig.app.json",
+            "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
             "polyfills": "src/polyfills.ts",
             "assets": [
               "src/assets",
@@ -25,9 +26,7 @@
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "node_modules/bootstrap/dist/css/bootstrap.css",
-              "node_modules/typeface-exo/index.css",
               "node_modules/roboto-fontface/css/roboto/roboto-fontface.css",
-              "node_modules/@fortawesome/fontawesome-free/css/all.css",
               "node_modules/nebular-icons/scss/nebular-icons.scss",
               "node_modules/pace-js/templates/pace-theme-flash.tmpl.css",
               "src/app/@theme/styles/styles.scss"
@@ -78,44 +77,42 @@
               ]
             }
           },
-          "defaultConfiguration": "hmr"
+          "defaultConfiguration": ""
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ngx-admin-demo:build"
+            "browserTarget": "backoffice:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ngx-admin-demo:build:production"
+              "browserTarget": "backoffice:build:production"
             },
             "hmr": {
               "hmr": true,
-              "browserTarget": "ngx-admin-demo:build:hmr"
+              "browserTarget": "backoffice:build:hmr"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngx-admin-demo:build"
+            "browserTarget": "backoffice:build"
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@angular-eslint/builder:lint",
           "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
-            "typeCheck": true,
-            "exclude": []
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
           }
         }
       }
     }
   },
-  "defaultProject": "ngx-admin-demo",
+  "defaultProject": "backoffice",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "ngx",

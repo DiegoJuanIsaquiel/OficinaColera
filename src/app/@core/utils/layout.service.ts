@@ -34,7 +34,7 @@ export class LayoutService {
    * Método que notifica que houve uma mudança no layout
    */
   public changeLayoutSize(): void {
-    this.layoutSize$.next();
+    this.layoutSize$.next(void 0);
   }
 
   /**

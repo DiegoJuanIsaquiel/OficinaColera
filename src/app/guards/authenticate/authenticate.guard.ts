@@ -22,7 +22,7 @@ export class AuthenticateGuard implements CanActivate {
 
   //#endregion
 
-  public async canActivate(route: ActivatedRouteSnapshot, _: RouterStateSnapshot) {
+  public async canActivate(route: ActivatedRouteSnapshot, _: RouterStateSnapshot): Promise<boolean> {
     const shouldLogout = route.queryParamMap.get('shouldLogout');
     const { unprotectedRoute, protectedRoute, routeToRedirect } = route.data || {};
 
@@ -42,6 +42,6 @@ export class AuthenticateGuard implements CanActivate {
     if (!hasToken && unprotectedRoute)
       return true;
 
-    return void await this.router.navigate([routeToRedirect], { replaceUrl: true });
+    return await this.router.navigate([routeToRedirect], { replaceUrl: true }).then(() => false);
   }
 }

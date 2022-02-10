@@ -36,9 +36,7 @@ export class PagesComponent implements OnInit {
   //#region LifeCycle Events
 
   public async ngOnInit(): Promise<void> {
-    const can = (permission: string, resource: string, menu: NbMenuItem) => {
-      return this.auth.isGranted(permission, resource) ? [menu] : [];
-    };
+    const can = (permission: string, resource: string, menu: NbMenuItem) => this.auth.isGranted(permission, resource) ? [menu] : [];
 
     this.menu = [
       ...can('view', 'dashboard', {

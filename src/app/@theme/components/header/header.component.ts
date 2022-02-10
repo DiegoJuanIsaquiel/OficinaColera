@@ -14,8 +14,8 @@ import { UserService } from '../../../services/user/user.service';
 
 @Component({
   selector: 'ngx-header',
-  styleUrls: ['./header.component.scss'],
   templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private layoutService: LayoutService,
     private breakpointService: NbMediaBreakpointsService,
     private readonly userService: UserService,
-    ) { }
+  ) { }
 
   //#endregion
 
@@ -44,7 +44,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public userPictureOnly: boolean = false;
 
-  public user: UserProxy;
+  public user: UserProxy | null = null;
 
   //#endregion
 

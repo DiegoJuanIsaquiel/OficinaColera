@@ -33,6 +33,7 @@ export class HttpAsyncHeadersInterceptor implements HttpInterceptor {
   /**
    * O header que pode ser passado para desativar esse interceptor
    */
+    // eslint-disable-next-line @typescript-eslint/naming-convention
   public static readonly DISABLE_HEADER: string = 'X-Disabled-HttpAsyncHeaders';
 
   //#endregion
@@ -52,7 +53,7 @@ export class HttpAsyncHeadersInterceptor implements HttpInterceptor {
     if (!req.headers.get(HttpAsyncHeadersInterceptor.DISABLE_HEADER)) {
       let headers = req.headers;
 
-      for (const property in this.config.defaultHeaders)
+      for (const property of Object.keys(this.config.defaultHeaders))
         headers = headers.set(property, this.config.defaultHeaders[property]);
 
       req = req.clone({

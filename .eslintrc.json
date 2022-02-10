@@ -1,0 +1,134 @@
+{
+  "root": true,
+  "ignorePatterns": [
+    "projects/**/*",
+    "dist/**/*"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "*.ts"
+      ],
+      "parserOptions": {
+        "project": [
+          "tsconfig.json"
+        ],
+        "createDefaultProgram": true
+      },
+      "extends": [
+        "plugin:@angular-eslint/ng-cli-compat",
+        "plugin:@angular-eslint/ng-cli-compat--formatting-add-on",
+        "plugin:@angular-eslint/template/process-inline-templates"
+      ],
+      "rules": {
+        "prefer-arrow/prefer-arrow-functions": 0,
+        "@angular-eslint/directive-selector": 0,
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "ngx",
+            "style": "kebab-case"
+          }
+        ],
+        "curly": "off",
+        "max-len": [
+          "warn"
+        ],
+        "@angular-eslint/no-output-on-prefix": "off",
+        "@typescript-eslint/no-inferrable-types": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/member-ordering": [
+          "warn",
+          {
+            "default": [
+              // Constructors
+              "public-constructor",
+              "protected-constructor",
+              "private-constructor",
+              // Index signature
+              "signature",
+              // Fields
+              "protected-decorated-field",
+              "protected-static-field",
+              "protected-instance-field",
+              "protected-abstract-field",
+              "private-decorated-field",
+              "private-static-field",
+              "private-instance-field",
+              "private-abstract-field",
+              "public-decorated-field",
+              "public-static-field",
+              "public-instance-field",
+              "public-abstract-field",
+              // Getters
+              "protected-decorated-get",
+              "protected-static-get",
+              "protected-instance-get",
+              "protected-abstract-get",
+              "protected-get",
+              "private-decorated-get",
+              "private-static-get",
+              "private-instance-get",
+              "private-abstract-get",
+              "private-get",
+              "public-decorated-get",
+              "public-static-get",
+              "public-instance-get",
+              "public-abstract-get",
+              "public-get",
+              "decorated-get",
+              "static-get",
+              "instance-get",
+              "abstract-get",
+              "get",
+              // Setters
+              "protected-decorated-set",
+              "protected-static-set",
+              "protected-instance-set",
+              "protected-abstract-set",
+              "protected-set",
+              "private-decorated-set",
+              "private-static-set",
+              "private-instance-set",
+              "private-abstract-set",
+              "private-set",
+              "public-decorated-set",
+              "public-static-set",
+              "public-instance-set",
+              "public-abstract-set",
+              "public-set",
+              "decorated-set",
+              "static-set",
+              "instance-set",
+              "abstract-set",
+              "set",
+              // Methods
+              "public-decorated-method",
+              "public-static-method",
+              "public-instance-method",
+              "public-abstract-method",
+              "protected-decorated-method",
+              "protected-static-method",
+              "protected-instance-method",
+              "protected-abstract-method",
+              "private-decorated-method",
+              "private-static-method",
+              "private-instance-method",
+              "private-abstract-method"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "files": [
+        "*.html"
+      ],
+      "extends": [
+        "plugin:@angular-eslint/template/recommended"
+      ],
+      "rules": {}
+    }
+  ]
+}

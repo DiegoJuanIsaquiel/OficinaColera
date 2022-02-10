@@ -13,7 +13,7 @@ import { UserProxy } from '../../models/proxys/user.proxy';
 })
 export class UserService {
 
-  //#region Public Properties
+  //#region Private Properties
 
   private readonly currentUser$: BehaviorSubject<UserProxy | null> = new BehaviorSubject<UserProxy | null>(this.getCurrentUser());
 
@@ -27,7 +27,7 @@ export class UserService {
 
   public getCurrentUser(): UserProxy | null {
     try {
-      return JSON.parse(localStorage.getItem(environment.keys.user));
+      return JSON.parse(localStorage.getItem(environment.keys.user) || '');
     } catch (e) {
       return null;
     }
