@@ -4,9 +4,8 @@ import { HttpEventType, HttpHeaders } from '@angular/common/http';
 import { Directive, OnDestroy } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
 import { fileTypeFromBuffer } from 'file-type/core';
-import { Observable, of, Subscription } from 'rxjs';
+import { Observable, Subscription, of } from 'rxjs';
 import { catchError, filter, mergeMap, tap } from 'rxjs/operators';
-
 import { PresignedPost } from '../../models/proxys/presigned-post.proxy';
 import { BaseUrlInterceptor } from '../../modules/http-async/interceptors/base-url.interceptor';
 import { BearerTokenInterceptor } from '../../modules/http-async/interceptors/bearer-token.interceptor';
@@ -41,7 +40,7 @@ export class HttpUploadFileShared implements OnDestroy {
   /**
    * A inscrição para o report de progresso do upload
    */
-  protected progressReportSubscription: Subscription;
+  protected progressReportSubscription?: Subscription;
 
   //#endregion
 
@@ -78,16 +77,22 @@ export class HttpUploadFileShared implements OnDestroy {
    * @param file As informações do arquivo
    * @param mediaType O tipo de mime type
    */
-  public async uploadFile(file: File, mediaType?: 'videos' | 'images' | 'avatars'): Promise<Observable<string>> {
+  public async uploadFile(file: File, mediaType?: 'videos' | 'images' | 'avatars'): Promise<Observable<string | null>> {
     this.isUploadingFile = true;
 
-    const mimeType = await fileTypeFromBuffer(await file.arrayBuffer()).then(info => info.mime || file.type).catch(() => file.type);
-    const { error, success: credentials } = await this.http.post<PresignedPost>(`/medias/presigned/${ mediaType || this.defaultMediaType }`, { mimeType });
+    const mimeType = await fileTypeFromBuffer(await file.arrayBuffer()).then(info => info?.mime || file.type).catch(() => file.type);
 
-    if (error) {
+    const { error, success: credentials } = await this.http.post<PresignedPost>(
+      `/medias/presigned/${ mediaType || this.defaultMediaType }`,
+      { mimeType },
+    );
+
+    if (error || !credentials) {
       this.isUploadingFile = false;
 
-      return void this.toast.danger(getCrudErrors(error)[0], 'Oops...');
+      this.toast.danger(getCrudErrors(error)[0], 'Oops...');
+
+      return of(null);
     }
 
     const filename = `${ credentials.url }/${ credentials.fields.key }`;
@@ -117,7 +122,7 @@ export class HttpUploadFileShared implements OnDestroy {
         if (event.type !== HttpEventType.UploadProgress)
           return;
 
-        this.uploadingProgress = Math.ceil((event.loaded / event.total) * 100);
+        this.uploadingProgress = Math.ceil((event.loaded / (event?.total || 0)) * 100);
       }),
       filter(event => {
         if (event.type !== HttpEventType.UploadProgress)

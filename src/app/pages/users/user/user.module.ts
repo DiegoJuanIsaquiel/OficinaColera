@@ -9,7 +9,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { RouterModule } from '@angular/router';
 import { NbSecurityModule } from '@nebular/security';
 import { NbButtonModule, NbCardModule, NbFormFieldModule, NbInputModule, NbSelectModule, NbSpinnerModule, NbToggleModule } from '@nebular/theme';
-
 import { CreateUserComponent } from './create-user.component';
 import { UpdateUserComponent } from './update-user.component';
 

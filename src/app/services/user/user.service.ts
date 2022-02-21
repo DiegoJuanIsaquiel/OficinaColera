@@ -2,7 +2,6 @@
 
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-
 import { environment } from '../../../environments/environment';
 import { UserProxy } from '../../models/proxys/user.proxy';
 

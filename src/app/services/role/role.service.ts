@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 import { NbRoleProvider } from '@nebular/security';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
 import { UserService } from '../user/user.service';
 
 //#endregion

@@ -2,7 +2,6 @@
 
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';
-
 import { environment } from '../../../environments/environment';
 import { UserService } from '../../services/user/user.service';
 

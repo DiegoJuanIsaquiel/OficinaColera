@@ -1,4 +1,4 @@
-import { DEFAULT_THEME as baseTheme, NbJSThemeOptions } from '@nebular/theme';
+import { NbJSThemeOptions, DEFAULT_THEME as baseTheme } from '@nebular/theme';
 
 const baseThemeVariables = baseTheme.variables || {};
 

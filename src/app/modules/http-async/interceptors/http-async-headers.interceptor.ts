@@ -3,7 +3,6 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { HttpAsyncConfig } from '../models/http-async.config';
 import { HTTP_ASYNC_CONFIG } from '../models/injection-tokens';
 

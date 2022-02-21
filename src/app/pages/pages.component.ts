@@ -2,7 +2,6 @@
 
 import { Component, OnInit } from '@angular/core';
 import { NbMenuItem } from '@nebular/theme';
-
 import { AuthService } from '../services/auth/auth.service';
 
 //#endregion

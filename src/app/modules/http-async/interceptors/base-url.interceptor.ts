@@ -3,7 +3,6 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { HttpAsyncConfig } from '../models/http-async.config';
 import { HTTP_ASYNC_CONFIG } from '../models/injection-tokens';
 
@@ -51,9 +50,9 @@ export class BaseUrlInterceptor implements HttpInterceptor {
     }
 
     if (!req.headers.get(BaseUrlInterceptor.DISABLE_HEADER))
-      req = req.clone({
+      {req = req.clone({
         url: `${ this.config?.baseUrl }${ req.url }`,
-      });
+      });}
     else {
       req = req.clone({
         headers: req.headers.delete(BaseUrlInterceptor.DISABLE_HEADER),

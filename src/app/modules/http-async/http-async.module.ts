@@ -1,6 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ModuleWithProviders, NgModule } from '@angular/core';
-
 import { HttpAsyncConfig } from './models/http-async.config';
 import { HTTP_ASYNC_CONFIG } from './models/injection-tokens';
 import { HttpAsyncService } from './services/http-async.service';

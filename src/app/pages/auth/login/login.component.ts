@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
-
 import { environment } from '../../../../environments/environment';
 import { TokenProxy } from '../../../models/proxys/token.proxy';
 import { UserProxy } from '../../../models/proxys/user.proxy';

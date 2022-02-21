@@ -3,7 +3,6 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { HttpAsyncConfig } from '../models/http-async.config';
 import { HTTP_ASYNC_CONFIG } from '../models/injection-tokens';
 
@@ -45,7 +44,10 @@ export class BearerTokenInterceptor implements HttpInterceptor {
    */
   public intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
     if (!this.config?.bearerTokenKey) {
-      console.warn('Você incluiu o Interceptor para adicionar o Bearer Token a requisição mas não configurou a chave para buscar o valor do cache no módulo.');
+      console.warn(
+        'Você incluiu o Interceptor para adicionar o Bearer Token a requisição ' +
+        'mas não configurou a chave para buscar o valor do cache no módulo.',
+      );
 
       return next.handle(req);
     }

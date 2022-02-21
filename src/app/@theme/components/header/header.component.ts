@@ -1,11 +1,9 @@
 //#region Imports
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
-import { NbMenuItem } from '@nebular/theme/components/menu/menu.service';
+import { NbMediaBreakpointsService, NbMenuItem, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 import { Subject } from 'rxjs';
 import { map, takeUntil } from 'rxjs/operators';
-
 import { LayoutService } from '../../../@core/utils';
 import { UserProxy } from '../../../models/proxys/user.proxy';
 import { UserService } from '../../../services/user/user.service';
@@ -32,12 +30,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   //#endregion
 
-  //#region Private Properties
-
-  private destroy$: Subject<void> = new Subject<void>();
-
-  //#endregion
-
   //#region Public Properties
 
   public userMenu: NbMenuItem[] = [{ title: 'Sair', link: '/auth/login', queryParams: { shouldLogout: true } }];
@@ -45,6 +37,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public userPictureOnly: boolean = false;
 
   public user: UserProxy | null = null;
+
+  //#endregion
+
+  //#region Private Properties
+
+  private destroy$: Subject<void> = new Subject<void>();
 
   //#endregion
 

@@ -1,7 +1,6 @@
 //#region Imports
 
 import { InjectionToken } from '@angular/core';
-
 import { HttpAsyncConfig } from './http-async.config';
 
 //#endregion

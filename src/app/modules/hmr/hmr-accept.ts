@@ -26,14 +26,14 @@ declare const KeyboardEvent: any;
 declare const Event: any;
 
 export default function(mod: any): void {
-  if (!mod.hot) {
+  if (!mod.hot)
     return;
-  }
+
 
   mod.hot.accept();
   mod.hot.dispose(() => {
     if (typeof ng === 'undefined') {
-      console.warn(`[NG HMR] Cannot find global 'ng'. Likely this is caused because scripts optimization is enabled.`);
+      console.warn('[NG HMR] Cannot find global \'ng\'. Likely this is caused because scripts optimization is enabled.');
 
       return;
     }
@@ -46,14 +46,14 @@ export default function(mod: any): void {
     // Reset JIT compiled components cache
     ɵresetCompiledComponents();
     const appRoot = getAppRoot();
-    if (!appRoot) {
+    if (!appRoot)
       return;
-    }
+
 
     const appRef = getApplicationRef(appRoot);
-    if (!appRef) {
+    if (!appRef)
       return;
-    }
+
 
     const oldInputs = document.querySelectorAll('input, textarea');
     const oldOptions = document.querySelectorAll('option');
@@ -73,15 +73,15 @@ export default function(mod: any): void {
 
     // Destroy old application, injectors, <style..., etc..
     const platformRef = getPlatformRef(appRoot);
-    if (platformRef) {
+    if (platformRef)
       platformRef.destroy();
-    }
+
 
     // Restore all inputs and options
     const bodyElement = document.body;
-    if ((oldInputs.length + oldOptions.length) === 0 || !bodyElement) {
+    if ((oldInputs.length + oldOptions.length) === 0 || !bodyElement)
       return;
-    }
+
 
     // Use a `MutationObserver` to wait until the app-root element has been bootstrapped.
     // ie: when the ng-version attribute is added.
@@ -89,14 +89,14 @@ export default function(mod: any): void {
       observer.disconnect();
 
       const newAppRoot = getAppRoot();
-      if (!newAppRoot) {
+      if (!newAppRoot)
         return;
-      }
+
 
       const newAppRef = getApplicationRef(newAppRoot);
-      if (!newAppRef) {
+      if (!newAppRef)
         return;
-      }
+
 
       // Wait until the application isStable to restore the form values
       newAppRef.isStable
@@ -132,7 +132,7 @@ function getToken<T>(appRoot: any, token: Type<T>): T | undefined {
 function getApplicationRef(appRoot: any): ApplicationRef | undefined {
   const appRef = getToken(appRoot, ApplicationRef);
   if (!appRef) {
-    console.warn(`[NG HMR] Cannot get 'ApplicationRef'.`);
+    console.warn('[NG HMR] Cannot get \'ApplicationRef\'.');
 
     return undefined;
   }
@@ -143,7 +143,7 @@ function getApplicationRef(appRoot: any): ApplicationRef | undefined {
 function getPlatformRef(appRoot: any): PlatformRef | undefined {
   const platformRef = getToken(appRoot, PlatformRef);
   if (!platformRef) {
-    console.warn(`[NG HMR] Cannot get 'PlatformRef'.`);
+    console.warn('[NG HMR] Cannot get \'PlatformRef\'.');
 
     return undefined;
   }
@@ -208,9 +208,9 @@ function restoreFormValues(oldInputs: any[], oldOptions: any[]): void {
 
       dispatchEvents(newElement);
     }
-  } else if (oldInputs.length) {
+  } else if (oldInputs.length)
     console.warn('[NG HMR] Cannot restore input/textarea values.');
-  }
+
 
   // Restore option
   const newOptions = document.querySelectorAll('option');
@@ -222,7 +222,7 @@ function restoreFormValues(oldInputs: any[], oldOptions: any[]): void {
 
       dispatchEvents(newElement);
     }
-  } else if (oldOptions.length) {
+  } else if (oldOptions.length)
     console.warn('[NG HMR] Cannot restore selected options.');
-  }
+
 }

@@ -6,10 +6,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NbToastrService } from '@nebular/theme';
 import { QueryJoin, QueryJoinArr, QuerySort, RequestQueryBuilder, SCondition } from '@nestjsx/crud-request';
-
-import { fromEvent, Subscription } from 'rxjs';
+import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
-
 import { BaseCrudProxy } from '../../models/proxys/base/base-crud.proxy';
 import { CrudRequestResponseProxy } from '../../models/proxys/base/crud-request-response.proxy';
 import { AsyncResult } from '../../modules/http-async/models/async-result';
@@ -123,11 +121,10 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
 
     const { error, success } = await this.getValues<TProxy>(this.route, 0, this.pageSizeDefault);
 
-    if (success) {
+    if (success)
       this.dataSource.connect().next(success);
-    } else {
+    else
       this.toast.danger(getCrudErrors(error)[0], 'Oops...');
-    }
 
     this.isLoadingResults = false;
   }
@@ -218,7 +215,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
 
     this.toast.success('A operação foi executada com sucesso!', 'Sucesso');
 
-    this.onPageChange(this.pageEvent);
+    await this.onPageChange(this.pageEvent);
   }
 
   //#endregion
@@ -251,14 +248,14 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
           query = query.search(searchQuery[0]);
         else
           query = query.search(searchQuery[1]);
-      } else {
+      } else
         query = query.search(searchQuery);
-      }
     }
 
     const queryParams = query.query(true);
 
-    const { success, error } = await this.http.get<CrudRequestResponseProxy<T>>(`${ url }${ url.includes('?') ? '&' : '?' }${ queryParams }`);
+    const requestUrl = `${ url }${ url.includes('?') ? '&' : '?' }${ queryParams }`;
+    const { success, error } = await this.http.get<CrudRequestResponseProxy<T>>(requestUrl);
 
     if (error)
       return { error };
@@ -268,7 +265,11 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
 
     this.dataSource.paginator.pageIndex = Array.isArray(success) ? 0 : success!.page - 1;
     this.dataSource.paginator.length = Array.isArray(success) ? success.length : success!.total;
-    this.dataSource.paginator.pageSize = Array.isArray(success) ? success.length : success!.count < this.pageSizeDefault ? this.pageSizeDefault : success!.count;
+    this.dataSource.paginator.pageSize = Array.isArray(success)
+      ? success.length
+      : success!.count < this.pageSizeDefault
+        ? this.pageSizeDefault
+        : success!.count;
 
     this.pageEvent = {
       length: this.dataSource.paginator.length,
@@ -305,18 +306,18 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
           query = query.search(searchQuery[0]);
         else
           query = query.search(searchQuery[1]);
-      } else {
+      } else
         query = query.search(searchQuery);
-      }
+
     }
 
     const queryParams = query.query(true);
 
     const { success, error } = await this.http.get<CrudRequestResponseProxy<TProxy>>(`${ url }${ url.includes('?') ? '&' : '?' }${ queryParams }`);
 
-    if (error) {
+    if (error)
       return { error };
-    }
+
 
     const sessionQuestions = Array.isArray(success) ? success : success!.data;
 

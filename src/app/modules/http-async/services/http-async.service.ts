@@ -2,9 +2,7 @@
 
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
-import { firstValueFrom, Observable, Subject } from 'rxjs';
-
+import { Observable, Subject, firstValueFrom } from 'rxjs';
 import { AsyncResult } from '../models/async-result';
 import { DefaultOptions, ExtraOptions } from '../models/http-options';
 

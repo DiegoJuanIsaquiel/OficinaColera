@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NbButtonModule, NbCardModule } from '@nebular/theme';
-
 import { NotFoundComponent } from './not-found.component';
 
 @NgModule({

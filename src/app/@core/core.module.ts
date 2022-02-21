@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule, Optional, SkipSelf } from '@angular/core';
 import { NbAuthModule } from '@nebular/auth';
-
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { LayoutService, SeoService } from './utils';
 

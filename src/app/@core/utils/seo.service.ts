@@ -23,9 +23,9 @@ export class SeoService implements OnDestroy {
     this.isBrowser = isPlatformBrowser(platformId);
     this.dom = document;
 
-    if (this.isBrowser) {
+    if (this.isBrowser)
       this.createCanonicalTag();
-    }
+
   }
 
   //#region Private Properties

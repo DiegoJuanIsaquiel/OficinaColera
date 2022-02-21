@@ -2,7 +2,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, fromEvent, merge, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, fromEvent, merge } from 'rxjs';
 import { mapTo, startWith } from 'rxjs/operators';
 
 //#endregion

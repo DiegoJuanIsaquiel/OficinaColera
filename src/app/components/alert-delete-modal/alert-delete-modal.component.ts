@@ -14,7 +14,7 @@ import { NbButtonModule, NbCardModule } from '@nebular/theme';
       <nb-card-body>{{ message }}</nb-card-body>
       <nb-card-footer class="d-flex justify-content-between">
         <button nbButton outline status="danger" (click)="onDelete.emit()">Sim, remover</button>
-        <button *ngIf="onClose.observers.length" nbButton outline status="basic" autofocus (click)="onClose.emit()">Cancelar</button>
+        <button *ngIf="onClose.observed" nbButton outline status="basic" autofocus (click)="onClose.emit()">Cancelar</button>
       </nb-card-footer>
     </nb-card>
   `,

@@ -1,5 +1,6 @@
 import { registerLocaleData } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+// eslint-disable-next-line import/no-unresolved
 import ptBr from '@angular/common/locales/pt';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -7,7 +8,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
 import { NbMenuModule, NbSidebarModule, NbToastrModule } from '@nebular/theme';
-
 import { environment } from '../environments/environment';
 import { CoreModule } from './@core/core.module';
 import { ThemeModule } from './@theme/theme.module';

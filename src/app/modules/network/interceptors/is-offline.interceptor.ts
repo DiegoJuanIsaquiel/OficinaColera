@@ -3,7 +3,6 @@
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable, Optional } from '@angular/core';
 import { Observable } from 'rxjs';
-
 import { NetworkService } from '../services/network.service';
 
 //#endregion

@@ -2,7 +2,6 @@
 
 import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import { Observable, throwError, timer } from 'rxjs';
 import { mergeMap, retryWhen } from 'rxjs/operators';
 

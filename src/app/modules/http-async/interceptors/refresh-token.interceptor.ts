@@ -4,12 +4,9 @@ import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
-
 import decode from 'jwt-decode';
-
-import { from, Observable, of } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { catchError, concatAll, map } from 'rxjs/operators';
-
 import { environment } from '../../../../environments/environment';
 import { TokenProxy } from '../../../models/proxys/token.proxy';
 import { UserService } from '../../../services/user/user.service';
@@ -120,7 +117,11 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
         ['Accept']: 'application/json',
       },
     } as unknown as Request)
-      .then(async result => result.ok ? ({ success: await result.json() as unknown as TokenProxy, error: undefined }) : ({ success: undefined, error: new HttpErrorResponse({ error: 'A sua sessão expirou, você precisa logar novamente.', status: 401 }) }))
+      .then(async result => result.ok
+        ? ({ success: await result.json() as unknown as TokenProxy, error: undefined })
+        : ({
+          success: undefined, error: new HttpErrorResponse({ error: 'A sua sessão expirou, você precisa logar novamente.', status: 401 }),
+        }))
       .catch(error => ({ error, success: undefined }))
       .then(async result => {
         if (result.error || !result.success)

@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-
 import { NetworkService } from './services/network.service';
 
 @NgModule({

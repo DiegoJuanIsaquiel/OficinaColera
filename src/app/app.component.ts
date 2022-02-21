@@ -1,7 +1,6 @@
 //#region Imports
 
 import { Component, OnInit } from '@angular/core';
-
 import { SeoService } from './@core/utils/seo.service';
 
 //#endregion
