@@ -8,7 +8,7 @@ import { AuthenticateGuard } from './guards/authenticate/authenticate.guard';
  */
 export const unAuthenticatedRoute = {
   canActivate: [AuthenticateGuard],
-  data: { routeToRedirect: environment.config.redirectToWhenAuthenticated, unprotectedRoute: true }
+  data: { routeToRedirect: environment.config.redirectToWhenAuthenticated, unprotectedRoute: true },
 };
 
 /**
@@ -16,7 +16,7 @@ export const unAuthenticatedRoute = {
  */
 export const authenticatedRoute = {
   canActivate: [AuthenticateGuard],
-  data: { routeToRedirect: environment.config.redirectToWhenUnauthenticated, protectedRoute: true }
+  data: { routeToRedirect: environment.config.redirectToWhenUnauthenticated, protectedRoute: true },
 };
 
 export const routes: Routes = [

@@ -23,6 +23,10 @@
         "plugin:@angular-eslint/template/process-inline-templates"
       ],
       "rules": {
+        "comma-dangle": [
+          "error",
+          "always-multiline"
+        ],
         "prefer-arrow/prefer-arrow-functions": 0,
         "@angular-eslint/no-output-on-prefix": "off",
         "@angular-eslint/directive-selector": 0,
