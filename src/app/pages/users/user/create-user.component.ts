@@ -38,6 +38,9 @@ export class CreateUserComponent extends BaseUserComponent {
     this.showLoading = true;
 
     const payload = this.formGroup.getRawValue();
+
+    payload.roles = payload.roles.split('|');
+
     const { error } = await this.http.post(environment.api.users.create, payload);
 
     this.showLoading = false;

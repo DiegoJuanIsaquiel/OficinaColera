@@ -2,12 +2,13 @@
 
 import { AfterViewInit, Directive, ElementRef, OnDestroy, OnInit, Optional, ViewChild } from '@angular/core';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { NbToastrService } from '@nebular/theme';
 import { QueryJoin, QueryJoinArr, QuerySort, RequestQueryBuilder, SCondition } from '@nestjsx/crud-request';
 import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap } from 'rxjs/operators';
+import * as xlsx from 'xlsx';
 import { BaseCrudProxy } from '../../models/proxys/base/base-crud.proxy';
 import { CrudRequestResponseProxy } from '../../models/proxys/base/crud-request-response.proxy';
 import { AsyncResult } from '../../modules/http-async/models/async-result';
@@ -43,11 +44,13 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     @Optional()
     protected sortBy: QuerySort = {
       field: 'createdAt',
-      order: 'ASC',
+      order: 'DESC',
     },
     @Optional()
     protected joins: QueryJoin | QueryJoinArr | Array<QueryJoin | QueryJoinArr> = [],
-  ) { }
+  ) {
+    this.defaultSortOrder = sortBy;
+  }
 
   //#endregion
 
@@ -74,6 +77,16 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
   //#endregion
 
   //#region Public Properties
+
+  /**
+   * O sort padrão
+   */
+  public defaultSortOrder: { field: string; order: 'ASC' | 'DESC' };
+
+  /**
+   * Diz se deveria incluir as entidades desativadas
+   */
+  public includeOnlyActives = true;
 
   /**
    * Diz se está carregando resultados
@@ -162,6 +175,30 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
   //#region Public Methods
 
   /**
+   * Método que busca os dados novamente a partir da primeira página
+   */
+  public async onChangeSort(sortedHeader: Sort): Promise<void> {
+    if (sortedHeader.direction !== '') {
+      this.sortBy = {
+        field: sortedHeader.active,
+        order: sortedHeader.direction.toUpperCase() as 'ASC' | 'DESC',
+      };
+    } else
+      this.sortBy = this.defaultSortOrder;
+
+    await this.reloadOnFirstPage();
+  }
+
+  /**
+   * Método que busca os dados novamente a partir da primeira página
+   */
+  public async reloadOnFirstPage(): Promise<void> {
+    this.pageEvent.pageIndex = 0;
+
+    await this.onPageChange(this.pageEvent);
+  }
+
+  /**
    * Método executado ao trocar de página
    *
    * @param event O evento lançado
@@ -218,6 +255,29 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     await this.onPageChange(this.pageEvent);
   }
 
+  /**
+   * Método que exporta todos os itens da tabela com o filtro atual
+   */
+  public async onClickExport(exportName: string): Promise<void> {
+    this.isLoadingResults = true;
+
+    const { error, success } = await this.getAllPaginatedData(0, 100);
+
+    this.isLoadingResults = false;
+
+    if (error || !success)
+      return void this.toast.danger(getCrudErrors(error)[0], 'Oops...');
+
+    const formattedDataToExcel = this.getFormattedDataToExcel(success);
+
+    const sheet = xlsx.utils.json_to_sheet(formattedDataToExcel);
+    const workbook = xlsx.utils.book_new();
+
+    xlsx.utils.book_append_sheet(workbook, sheet, exportName);
+
+    xlsx.writeFile(workbook, `${ exportName } v${ +new Date() }.xlsx`);
+  }
+
   //#endregion
 
   //#region Protected Methods
@@ -240,17 +300,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
       .sortBy(this.sortBy)
       .search({});
 
-    const searchQuery = this.searchConditions && await this.searchConditions(search || '');
-
-    if (searchQuery) {
-      if (Array.isArray(searchQuery)) {
-        if (!search)
-          query = query.search(searchQuery[0]);
-        else
-          query = query.search(searchQuery[1]);
-      } else
-        query = query.search(searchQuery);
-    }
+    query = await this.applySearchParamsToQuery(query, search);
 
     const queryParams = query.query(true);
 
@@ -298,18 +348,8 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
       .search({});
 
     const search = this.searchInput?.nativeElement?.value || '';
-    const searchQuery = this.searchConditions && await this.searchConditions(search);
 
-    if (searchQuery) {
-      if (Array.isArray(searchQuery)) {
-        if (!search)
-          query = query.search(searchQuery[0]);
-        else
-          query = query.search(searchQuery[1]);
-      } else
-        query = query.search(searchQuery);
-
-    }
+    query = await this.applySearchParamsToQuery(query, search);
 
     const queryParams = query.query(true);
 
@@ -317,7 +357,6 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
 
     if (error)
       return { error };
-
 
     const sessionQuestions = Array.isArray(success) ? success : success!.data;
 
@@ -335,12 +374,54 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
   }
 
   /**
+   * Método usado para retornar os dados transformados para serem colocados exportados para o Excel
+   *
+   * @param success A lista de itens
+   */
+  protected getFormattedDataToExcel(success: TProxy[]): any {
+    return success;
+  }
+
+  /**
    * Diz se o valor da variável é uma string
    *
    * @param value O valor a ser verificado
    */
   protected isString(value: any): boolean {
     return Object.prototype.toString.call(value) === '[object String]';
+  }
+
+  /**
+   * Método que aplica os query params para um query builder
+   *
+   * @param query A instância da query
+   * @param search O texto de pesquisa
+   */
+  protected async applySearchParamsToQuery(query: RequestQueryBuilder, search?: string): Promise<RequestQueryBuilder> {
+    const searchQuery = this.searchConditions && await this.searchConditions(search || '');
+
+    if (searchQuery) {
+      if (Array.isArray(searchQuery)) {
+        if (!search) {
+          query = query.search({
+            ...this.includeOnlyActives && { isActive: this.includeOnlyActives },
+            ...searchQuery[0],
+          });
+        } else {
+          query = query.search({
+            ...this.includeOnlyActives && { isActive: this.includeOnlyActives },
+            ...searchQuery[1],
+          });
+        }
+      } else {
+        query = query.search({
+          ...this.includeOnlyActives && { isActive: this.includeOnlyActives },
+          ...searchQuery,
+        });
+      }
+    }
+
+    return query;
   }
 
   //#endregion

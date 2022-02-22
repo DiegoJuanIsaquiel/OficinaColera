@@ -5,8 +5,9 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { NbSecurityModule } from '@nebular/security';
-import { NbButtonModule, NbCardModule, NbIconModule, NbInputModule, NbPopoverModule, NbSpinnerModule } from '@nebular/theme';
+import { NbButtonModule, NbCardModule, NbIconModule, NbInputModule, NbPopoverModule, NbSpinnerModule, NbToggleModule } from '@nebular/theme';
 import { AlertDeleteModalModule } from '../../../components/alert-delete-modal/alert-delete-modal.component';
+import { RolePipeModule } from '../../../pipes/role.pipe';
 import { ListUsersComponent } from './list-users.component';
 
 @NgModule({
@@ -24,6 +25,8 @@ import { ListUsersComponent } from './list-users.component';
     NbSecurityModule,
     NbPopoverModule,
     NbIconModule,
+    NbToggleModule,
+    RolePipeModule,
   ],
   exports: [
     ListUsersComponent,
