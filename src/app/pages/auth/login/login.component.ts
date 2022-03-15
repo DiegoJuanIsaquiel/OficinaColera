@@ -52,11 +52,8 @@ export class LoginComponent {
 
   //#endregion
 
-  //#region Public Methods
+  //#region Methods
 
-  /**
-   * Método que realiza o login de um usuário
-   */
   public async onSubmit(): Promise<void> {
     if (this.formGroup.invalid || this.isLoadingLogin)
       return;
@@ -87,8 +84,6 @@ export class LoginComponent {
 
       return void this.toast.danger('Você não tem permissão para acessar esses recursos.', 'Oops...');
     }
-
-    console.log('deu certo');
 
     await this.router.navigateByUrl(environment.config.redirectToWhenAuthenticated);
   }

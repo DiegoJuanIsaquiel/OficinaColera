@@ -14,21 +14,15 @@ import { CrudRequestResponseProxy } from '../../models/proxys/base/crud-request-
 import { AsyncResult } from '../../modules/http-async/models/async-result';
 import { HttpAsyncService } from '../../modules/http-async/services/http-async.service';
 import { UserService } from '../../services/user/user.service';
-import { getCrudErrors } from '../utils/functions';
+import { getCrudErrors, isString } from '../utils/functions';
 
 //#endregion
 
-/**
- * A classe que representa o conteúdo básico para uma página que irá conter páginação
- */
 @Directive()
 export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> implements OnInit, AfterViewInit, OnDestroy {
 
   //#region Constructor
 
-  /**
-   * Construtor padrão
-   */
   constructor(
     protected readonly toast: NbToastrService,
     protected readonly http: HttpAsyncService,
@@ -54,79 +48,38 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
 
   //#endregion
 
-  //#region View Childs
+  //#region Properties
 
-  /**
-   * O elemento responsável pela paginação
-   */
   @ViewChild(MatPaginator, { static: true })
   public paginator?: MatPaginator;
 
-  /**
-   * O element responsável pelo sorting
-   */
   @ViewChild(MatSort, { static: true })
   public sort?: MatSort;
 
-  /**
-   * O elemento responsável pela pesquisa
-   */
   @ViewChild('input', { static: true })
   public searchInput?: ElementRef;
 
-  //#endregion
-
-  //#region Public Properties
-
-  /**
-   * O sort padrão
-   */
   public defaultSortOrder: { field: string; order: 'ASC' | 'DESC' };
 
-  /**
-   * Diz se deveria incluir as entidades desativadas
-   */
   public includeOnlyActives = true;
 
-  /**
-   * Diz se está carregando resultados
-   */
   public isLoadingResults = true;
 
-  /**
-   * A lista de informações que serão paginadas
-   */
   public dataSource!: MatTableDataSource<TProxy>;
 
-  /**
-   * As informações de paginação
-   */
   public pageEvent: Partial<PageEvent> = {
     pageIndex: 0,
     pageSize: 15,
   };
 
-  /**
-   * O numero padrão de itens por página
-   */
   public pageSizeDefault: number = 15;
 
-  //#endregion
-
-  //#region Private Properties
-
-  /**
-   * A inscrição do evento para filtrar
-   */
   private searchInputSubscription?: Subscription;
 
   //#endregion
 
-  //#region LifeCycle Events
+  //#region Methods
 
-  /**
-   * Método que é executado ao iniciar o componente
-   */
   public async ngOnInit(): Promise<void> {
     this.dataSource = new MatTableDataSource<TProxy>([]);
     this.dataSource.paginator = this.paginator ?? null;
@@ -142,9 +95,6 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     this.isLoadingResults = false;
   }
 
-  /**
-   * Método que é executado após iniciar a view
-   */
   public ngAfterViewInit(): void {
     if (!this.searchInput || !this.searchInput.nativeElement)
       return;
@@ -160,23 +110,12 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
         }),
       )
       .subscribe();
-
   }
 
-  /**
-   * Método chamado quando o componente é destruido
-   */
   public ngOnDestroy(): void {
     this.searchInputSubscription?.unsubscribe();
   }
 
-  //#endregion
-
-  //#region Public Methods
-
-  /**
-   * Método que busca os dados novamente a partir da primeira página
-   */
   public async onChangeSort(sortedHeader: Sort): Promise<void> {
     if (sortedHeader.direction !== '') {
       this.sortBy = {
@@ -189,27 +128,19 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     await this.reloadOnFirstPage();
   }
 
-  /**
-   * Método que busca os dados novamente a partir da primeira página
-   */
   public async reloadOnFirstPage(): Promise<void> {
     this.pageEvent.pageIndex = 0;
 
     await this.onPageChange(this.pageEvent);
   }
 
-  /**
-   * Método executado ao trocar de página
-   *
-   * @param event O evento lançado
-   */
   public async onPageChange(event: Partial<PageEvent>): Promise<void> {
     this.isLoadingResults = true;
 
     this.pageEvent = event;
 
     const value = this.searchInput && this.searchInput.nativeElement && this.searchInput.nativeElement.value || '';
-    const searchValue = this.isString(value) && value.trim().toLocaleLowerCase() || '';
+    const searchValue = isString(value) && value.trim().toLocaleLowerCase() || '';
 
     const { error, success } = await this.getValues<TProxy>(
       this.route,
@@ -226,11 +157,6 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     this.dataSource?.connect().next(success);
   }
 
-  /**
-   * Método que alterna a visibilidade de uma entidade
-   *
-   * @param entity A entidade a ser alternada
-   */
   public async onClickToDelete(entity: BaseCrudProxy): Promise<void> {
     const user = this.user.getCurrentUser();
 
@@ -255,9 +181,6 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     await this.onPageChange(this.pageEvent);
   }
 
-  /**
-   * Método que exporta todos os itens da tabela com o filtro atual
-   */
   public async onClickExport(exportName: string): Promise<void> {
     this.isLoadingResults = true;
 
@@ -277,10 +200,6 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
 
     xlsx.writeFile(workbook, `${ exportName } v${ +new Date() }.xlsx`);
   }
-
-  //#endregion
-
-  //#region Protected Methods
 
   /**
    * Método que retorna os parametros para uma busca mais complexa
@@ -380,15 +299,6 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
    */
   protected getFormattedDataToExcel(success: TProxy[]): any {
     return success;
-  }
-
-  /**
-   * Diz se o valor da variável é uma string
-   *
-   * @param value O valor a ser verificado
-   */
-  protected isString(value: any): boolean {
-    return Object.prototype.toString.call(value) === '[object String]';
   }
 
   /**
