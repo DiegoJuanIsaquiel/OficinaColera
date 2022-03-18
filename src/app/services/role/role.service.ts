@@ -30,7 +30,7 @@ export class RoleService implements NbRoleProvider {
   }
 
   public getRoleSync(): string[] {
-    return ['admin'] || ['none'];
+    return this.user.getCurrentUser()?.roles || ['none'];
   }
 
   //#endregion

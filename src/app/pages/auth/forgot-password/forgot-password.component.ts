@@ -47,7 +47,7 @@ export class ForgotPasswordComponent {
 
   public formGroup: FormGroup;
 
-  public currentStep: ForgotPasswordStepsEnum = ForgotPasswordStepsEnum.email;
+  public currentStep: ForgotPasswordStepsEnum = ForgotPasswordStepsEnum.EMAIL;
 
   public stepsEnum: typeof ForgotPasswordStepsEnum = ForgotPasswordStepsEnum;
 
@@ -73,7 +73,7 @@ export class ForgotPasswordComponent {
 
     this.toast.success('Código de recuperação enviado para o email!', 'Sucesso');
 
-    this.currentStep++;
+    this.currentStep = ForgotPasswordStepsEnum.NEW_PASSWORD;
   }
 
   public async resetPassword(): Promise<void> {

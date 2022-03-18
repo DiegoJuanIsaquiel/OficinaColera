@@ -1,4 +1,4 @@
 export enum ForgotPasswordStepsEnum {
-  email = 1,
-  newPassword = 2,
+  EMAIL = 1,
+  NEW_PASSWORD = 2,
 }

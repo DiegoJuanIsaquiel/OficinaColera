@@ -87,6 +87,13 @@
         "@typescript-eslint/restrict-template-expressions": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-inferrable-types": "off",
+        "@typescript-eslint/naming-convention": [
+          "error",
+          {
+            "selector": "enumMember",
+            "format": ["UPPER_CASE"]
+          }
+        ],
         "@typescript-eslint/member-ordering": [
           "error",
           {
