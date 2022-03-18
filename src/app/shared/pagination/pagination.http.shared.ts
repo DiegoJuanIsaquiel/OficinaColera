@@ -48,7 +48,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
 
   //#endregion
 
-  //#region ViewChilds
+  //#region View Childs
 
   @ViewChild(MatPaginator, { static: true })
   public paginator?: MatPaginator;
