@@ -28,9 +28,13 @@ export class HttpUploadFileShared implements OnDestroy {
 
   //#endregion
 
-  //#region Properties
+  //#region Protected Properties
 
   protected progressReportSubscription?: Subscription;
+
+  //#endregion
+
+  //#region Public Properties
 
   public isUploadingFile: boolean = false;
 
@@ -38,11 +42,15 @@ export class HttpUploadFileShared implements OnDestroy {
 
   //#endregion
 
-  //#region Methods
+  //#region LifeCycle Events
 
   public async ngOnDestroy(): Promise<void> {
     this.progressReportSubscription?.unsubscribe();
   }
+
+  //#endregion
+
+  //#region Public Methods
 
   public async uploadFile(file: File, mediaType?: 'videos' | 'images' | 'avatars'): Promise<Observable<string | null>> {
     this.isUploadingFile = true;

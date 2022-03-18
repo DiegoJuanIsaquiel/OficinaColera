@@ -48,7 +48,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
 
   //#endregion
 
-  //#region Properties
+  //#region ViewChilds
 
   @ViewChild(MatPaginator, { static: true })
   public paginator?: MatPaginator;
@@ -58,6 +58,10 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
 
   @ViewChild('input', { static: true })
   public searchInput?: ElementRef;
+
+  //#endregion
+
+  //#region Public Properties
 
   public defaultSortOrder: { field: string; order: 'ASC' | 'DESC' };
 
@@ -74,18 +78,22 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
 
   public pageSizeDefault: number = 15;
 
+  //#endregion
+
+  //#region Private Properties
+
   private searchInputSubscription?: Subscription;
 
   //#endregion
 
-  //#region Methods
+  //#region LifeCycle Events
 
   public async ngOnInit(): Promise<void> {
     this.dataSource = new MatTableDataSource<TProxy>([]);
     this.dataSource.paginator = this.paginator ?? null;
     this.dataSource.sort = this.sort ?? null;
 
-    const { error, success } = await this.getValues<TProxy>(this.route, 0, this.pageSizeDefault);
+    const { error, success } = await this.getPaginatedData<TProxy>(this.route, 0, this.pageSizeDefault);
 
     if (success)
       this.dataSource.connect().next(success);
@@ -116,6 +124,10 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     this.searchInputSubscription?.unsubscribe();
   }
 
+  //#endregion
+
+  //#region Public Methods
+
   public async onChangeSort(sortedHeader: Sort): Promise<void> {
     if (sortedHeader.direction !== '') {
       this.sortBy = {
@@ -142,7 +154,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     const value = this.searchInput && this.searchInput.nativeElement && this.searchInput.nativeElement.value || '';
     const searchValue = isString(value) && value.trim().toLocaleLowerCase() || '';
 
-    const { error, success } = await this.getValues<TProxy>(
+    const { error, success } = await this.getPaginatedData<TProxy>(
       this.route,
       this.pageEvent.pageIndex || 0,
       this.pageEvent.pageSize || this.pageSizeDefault,
@@ -184,7 +196,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
   public async onClickExport(exportName: string): Promise<void> {
     this.isLoadingResults = true;
 
-    const { error, success } = await this.getAllPaginatedData(0, 100);
+    const { error, success } = await this.getAllData(0, 100);
 
     this.isLoadingResults = false;
 
@@ -201,15 +213,11 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     xlsx.writeFile(workbook, `${ exportName } v${ +new Date() }.xlsx`);
   }
 
-  /**
-   * Método que retorna os parametros para uma busca mais complexa
-   *
-   * @param url O url a ser usado como referência
-   * @param page O indice da página
-   * @param limit O limite de itens por página
-   * @param search O termo a ser buscado
-   */
-  protected async getValues<T>(url: string, page: number, limit: number, search?: string): Promise<AsyncResult<T[]>> {
+  //#endregion
+
+  //#region Protected Methods
+
+  protected async getPaginatedData<T>(url: string, page: number, limit: number, search?: string): Promise<AsyncResult<T[]>> {
     let query = new RequestQueryBuilder()
       .select(this.entityColumns)
       .setPage(page + 1)
@@ -249,14 +257,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     return { success: Array.isArray(success) ? success : success!.data };
   }
 
-  /**
-   * Método que carrega todas as entidades a partir de uma página em específico até acabar
-   *
-   * @param page A página a ser carregada
-   * @param limit O limite de itens por página
-   * @param url Um URL customizado para realizar a requisição de pesquisa
-   */
-  protected async getAllPaginatedData(page: number = 0, limit = 200, url = this.route): Promise<AsyncResult<TProxy[]>> {
+  protected async getAllData(page: number = 0, limit = 200, url = this.route): Promise<AsyncResult<TProxy[]>> {
     let query = new RequestQueryBuilder()
       .select(this.entityColumns.map(key => String(key)))
       .setPage(page + 1)
@@ -282,7 +283,7 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     if (sessionQuestions.length !== limit)
       return { success: sessionQuestions };
 
-    const { error: errorOnGetMore, success: moreSessionQuestions } = await this.getAllPaginatedData(page + 1);
+    const { error: errorOnGetMore, success: moreSessionQuestions } = await this.getAllData(page + 1);
 
     if (errorOnGetMore)
       return { error: errorOnGetMore };
@@ -292,21 +293,10 @@ export abstract class PaginationHttpShared<TProxy extends BaseCrudProxy> impleme
     };
   }
 
-  /**
-   * Método usado para retornar os dados transformados para serem colocados exportados para o Excel
-   *
-   * @param success A lista de itens
-   */
   protected getFormattedDataToExcel(success: TProxy[]): any {
     return success;
   }
 
-  /**
-   * Método que aplica os query params para um query builder
-   *
-   * @param query A instância da query
-   * @param search O texto de pesquisa
-   */
   protected async applySearchParamsToQuery(query: RequestQueryBuilder, search?: string): Promise<RequestQueryBuilder> {
     const searchQuery = this.searchConditions && await this.searchConditions(search || '');
 
