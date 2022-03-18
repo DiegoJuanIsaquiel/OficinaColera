@@ -47,19 +47,22 @@ export class LoginComponent {
 
   public formGroup: FormGroup;
 
-  public hidePassword = true;
+  public shouldHidePassword = true;
+
   public isLoadingLogin: boolean = false;
 
   //#endregion
 
-  //#region Methods
+  //#region Public Methods
 
   public async onSubmit(): Promise<void> {
     if (this.formGroup.invalid || this.isLoadingLogin)
       return;
 
     this.isLoadingLogin = true;
+
     const { error, success } = await this.http.post<TokenProxy>(environment.api.auth.login, this.formGroup.getRawValue());
+
     this.isLoadingLogin = false;
 
     if (error || !success)
@@ -68,8 +71,19 @@ export class LoginComponent {
     localStorage.setItem(environment.keys.token, success.token);
     localStorage.setItem(environment.keys.refreshToken, success.refreshToken);
 
+    await this.refreshUser();
+    await this.navigateToHomeIfUserHasPermission();
+  }
+
+  //#endregion
+
+  //#region Private Methods
+
+  private async refreshUser(): Promise<void> {
     this.isLoadingLogin = true;
+
     const { error: userError, success: user } = await this.http.get<UserProxy>(environment.api.users.me);
+
     this.isLoadingLogin = false;
 
     if (userError)
@@ -77,7 +91,9 @@ export class LoginComponent {
 
     localStorage.setItem(environment.keys.user, JSON.stringify(user));
     this.user.refreshCurrentUser();
+  }
 
+  private async navigateToHomeIfUserHasPermission(): Promise<void> {
     if (!this.auth.isGranted('view', 'dashboard')) {
       localStorage.clear();
       this.user.refreshCurrentUser();
