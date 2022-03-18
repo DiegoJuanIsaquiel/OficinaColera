@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 import { NbButtonModule, NbCardModule, NbFormFieldModule, NbIconModule, NbInputModule, NbLayoutModule, NbSpinnerModule } from '@nebular/theme';
 import { ThemeModule } from '../../@theme/theme.module';
 import { AuthComponent } from './auth.component';
+import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { LoginComponent } from './login/login.component';
 
 @NgModule({
@@ -18,6 +19,7 @@ import { LoginComponent } from './login/login.component';
         component: AuthComponent,
         children: [
           { path: 'login', component: LoginComponent },
+          { path: 'forgot-password', component: ForgotPasswordComponent },
           { path: '', redirectTo: 'login', pathMatch: 'full' },
         ],
       },
@@ -39,6 +41,7 @@ import { LoginComponent } from './login/login.component';
   declarations: [
     AuthComponent,
     LoginComponent,
+    ForgotPasswordComponent,
   ],
 })
 export class AuthModule {}
