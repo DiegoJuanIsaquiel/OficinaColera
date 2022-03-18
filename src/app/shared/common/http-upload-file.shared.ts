@@ -23,7 +23,7 @@ export class HttpUploadFileShared implements OnDestroy {
   constructor(
     protected readonly toast: NbToastrService,
     protected readonly http: HttpAsyncService,
-    protected readonly defaultMediaType?: 'videos' | 'images' | 'lessons',
+    protected readonly defaultMediaType?: 'videos' | 'images',
   ) { }
 
   //#endregion
