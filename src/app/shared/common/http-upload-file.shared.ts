@@ -15,68 +15,43 @@ import { getCrudErrors } from '../utils/functions';
 
 //#endregion
 
-/**
- * A classe que irá lidar com o upload de arquivos
- */
 @Directive()
 export class HttpUploadFileShared implements OnDestroy {
 
   //#region Constructor
 
-  /**
-   * Construtor padrão
-   */
   constructor(
     protected readonly toast: NbToastrService,
     protected readonly http: HttpAsyncService,
-    protected readonly defaultMediaType?: 'videos' | 'images' | 'lessons',
+    protected readonly defaultMediaType?: 'videos' | 'images',
   ) { }
 
   //#endregion
 
+  //#region Protected Properties
 
-  //#region Private Properties
-
-  /**
-   * A inscrição para o report de progresso do upload
-   */
   protected progressReportSubscription?: Subscription;
 
   //#endregion
 
   //#region Public Properties
 
-  /**
-   * Diz se está realizando o upload do arquivo
-   */
   public isUploadingFile: boolean = false;
 
-  /**
-   * O progresso do upload
-   */
   public uploadingProgress: number = 0;
 
   //#endregion
 
   //#region LifeCycle Events
 
-  /**
-   * Método executado ao destruir o componente
-   */
   public async ngOnDestroy(): Promise<void> {
     this.progressReportSubscription?.unsubscribe();
   }
 
   //#endregion
 
-  //#region Public Properties
+  //#region Public Methods
 
-  /**
-   * Método que realiza o upload do arquivo
-   *
-   * @param file As informações do arquivo
-   * @param mediaType O tipo de mime type
-   */
   public async uploadFile(file: File, mediaType?: 'videos' | 'images' | 'avatars'): Promise<Observable<string | null>> {
     this.isUploadingFile = true;
 

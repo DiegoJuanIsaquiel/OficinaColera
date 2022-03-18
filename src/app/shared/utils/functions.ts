@@ -1,17 +1,7 @@
-/**
- * Método que pausa a execução por uma certa quantidade de tempo
- *
- * @param ms A quantidade de tempo em millisegundos
- */
 export async function delay(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-/**
- * Método que retorna uma lista de erros
- *
- * @param error
- */
 export function getCrudErrors({ status, error }: any): string[] {
   if (!error || status >= 500 && status <= 599)
     return ['Ocorreu um erro interno, por favor, tente novamente.'];
@@ -29,4 +19,8 @@ export function getCrudErrors({ status, error }: any): string[] {
   // @ts-ignore
   return error.message.map(({ constraints }) => constraints && Object.values(constraints) || [])
     .reduce((acc: any, actual: any) => [...acc, ...actual] as string[]);
+}
+
+export function isString(value: any): boolean {
+  return Object.prototype.toString.call(value) === '[object String]';
 }
