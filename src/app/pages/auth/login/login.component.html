@@ -20,6 +20,8 @@
         </button>
       </nb-form-field>
 
+      <p class="login--password" routerLink="/auth/forgot-password">Esqueceu a senha?</p>
+
       <button [disabled]="formGroup.invalid"
               [nbSpinner]="isLoadingLogin"
               nbButton
@@ -30,7 +32,7 @@
     </nb-card-body>
 
     <nb-card-footer class="d-flex flex-column">
-      <img class="login--footer mw-100" src="assets/imgs/liga_logo.svg">
+      <img class="login--footer mw-100" src="assets/imgs/liga_logo.svg" alt="Desenvolvido por LIGA Facens">
     </nb-card-footer>
   </nb-card>
 

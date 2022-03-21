@@ -28,11 +28,11 @@ export class LoginComponent {
     private readonly route: ActivatedRoute,
     private readonly http: HttpAsyncService,
     private readonly toast: NbToastrService,
-    private readonly fb: FormBuilder,
+    private readonly formBuilder: FormBuilder,
     private readonly auth: AuthService,
     private readonly user: UserService,
   ) {
-    this.formGroup = this.fb.group({
+    this.formGroup = this.formBuilder.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
     });

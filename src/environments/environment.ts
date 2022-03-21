@@ -27,5 +27,9 @@ export const environment = {
       update: '/users/{userId}',
       me: '/users/me',
     },
+    userPassword: {
+      forgotPassword: '/users/password/forgot/email/{email}',
+      resetPassword: '/users/password/reset/{resetPasswordCode}',
+    },
   },
 };
