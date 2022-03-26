@@ -16,7 +16,7 @@ export class RolePipe implements PipeTransform {
       [RolesEnum.ADMIN]: 'Administrador Global',
     };
 
-    const nonExistentRole = !Object.values(roleToString).some(possibleRole => possibleRole === role);
+    const nonExistentRole = !Object.keys(roleToString).some(possibleRole => possibleRole === role);
 
     if (nonExistentRole)
       return 'Desconhecido';
