@@ -6,16 +6,17 @@ import { AuthService } from '../../services/auth/auth.service';
 
 //#endregion
 
+/**
+ * Classe utilizada para verificar se o usuário possui a
+ * permissão necessária para acessar a página.
+ */
 @Injectable({
   providedIn: 'root',
 })
-export class GrantedGuard implements CanActivate {
+export class GrantedPermissionGuard implements CanActivate {
 
   //#region Constructor
 
-  /**
-   * Construtor padrão
-   */
   constructor(
     private readonly router: Router,
     private readonly authService: AuthService,

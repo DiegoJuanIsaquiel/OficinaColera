@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { GrantedGuard } from '../guards/granted/granted.guard';
+import { GrantedPermissionGuard } from '../guards/granted-permission/granted-permission.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { PagesComponent } from './pages.component';
 
@@ -9,7 +9,7 @@ import { PagesComponent } from './pages.component';
  * É configurado dentro do app.module.ts
  */
 export const grantedRoute = (key: string) => ({
-  canActivate: [GrantedGuard],
+  canActivate: [GrantedPermissionGuard],
   data: { keyToCheck: key, routeToRedirectWhenHasNoPermission: '/pages' },
 });
 
