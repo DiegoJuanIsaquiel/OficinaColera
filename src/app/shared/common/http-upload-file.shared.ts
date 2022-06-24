@@ -3,9 +3,8 @@
 import { HttpEventType, HttpHeaders } from '@angular/common/http';
 import { Directive, OnDestroy } from '@angular/core';
 import { NbToastrService } from '@nebular/theme';
-import { fileTypeFromBuffer } from 'file-type/core';
 import { Observable, Subscription, of } from 'rxjs';
-import { catchError, filter, mergeMap, tap } from 'rxjs/operators';
+import { catchError, delay, filter, mergeMap, tap } from 'rxjs/operators';
 import { PresignedPost } from '../../models/proxys/presigned-post.proxy';
 import { BaseUrlInterceptor } from '../../modules/http-async/interceptors/base-url.interceptor';
 import { BearerTokenInterceptor } from '../../modules/http-async/interceptors/bearer-token.interceptor';
@@ -23,12 +22,12 @@ export class HttpUploadFileShared implements OnDestroy {
   constructor(
     protected readonly toast: NbToastrService,
     protected readonly http: HttpAsyncService,
-    protected readonly defaultMediaType?: 'videos' | 'images',
+    protected readonly defaultMediaType?: 'videos' | 'images' | 'avatars',
   ) { }
 
   //#endregion
 
-  //#region Protected Properties
+  //#region Private Properties
 
   protected progressReportSubscription?: Subscription;
 
@@ -50,17 +49,13 @@ export class HttpUploadFileShared implements OnDestroy {
 
   //#endregion
 
-  //#region Public Methods
+  //#region Public Properties
 
   public async uploadFile(file: File, mediaType?: 'videos' | 'images' | 'avatars'): Promise<Observable<string | null>> {
     this.isUploadingFile = true;
 
-    const mimeType = await fileTypeFromBuffer(await file.arrayBuffer()).then(info => info?.mime || file.type).catch(() => file.type);
-
-    const { error, success: credentials } = await this.http.post<PresignedPost>(
-      `/medias/presigned/${ mediaType || this.defaultMediaType }`,
-      { mimeType },
-    );
+    const filename = file.name;
+    const { error, success: credentials } = await this.http.post<PresignedPost>(`/media/presigned/${ mediaType || this.defaultMediaType }`, { filename });
 
     if (error || !credentials) {
       this.isUploadingFile = false;
@@ -70,10 +65,8 @@ export class HttpUploadFileShared implements OnDestroy {
       return of(null);
     }
 
-    const filename = `${ credentials.url }/${ credentials.fields.key }`;
+    const s3Url = `${ credentials.url }/${ credentials.fields.key }`;
     const formData = new FormData();
-
-    formData.append('Content-Type', mimeType);
 
     Object.entries(credentials.fields).forEach(([key, value]) => {
       formData.append(key, value);
@@ -99,22 +92,18 @@ export class HttpUploadFileShared implements OnDestroy {
 
         this.uploadingProgress = Math.ceil((event.loaded / (event?.total || 0)) * 100);
       }),
-      filter(event => {
-        if (event.type !== HttpEventType.UploadProgress)
-          return false;
-
-        return event.loaded === event.total;
-      }),
+      filter(event => event.type === HttpEventType.Response),
       mergeMap(() => {
         this.isUploadingFile = false;
 
-        return of(filename);
+        return of(s3Url);
       }),
       catchError(() => {
         this.isUploadingFile = false;
 
         return of(null);
       }),
+      delay(500),
     );
   }
 
