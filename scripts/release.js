@@ -63,5 +63,8 @@ bumpVersion().then(bumpCapacitorVersion).then(generateChangelog).then(async () =
 
   const filesToCommit = ['.versionrc', 'CHANGELOG.md', ...androidFiles, ...iosFiles];
 
-  await ezSpawn.async('git', ['commit', '--amend', '--no-verify', '--no-edit', ...filesToCommit]);
+  for (const file of filesToCommit)
+    await ezSpawn.async('git', ['add', file]);
+
+  await ezSpawn.async('git', ['commit', '--amend', '--no-verify', '--no-edit']);
 });
