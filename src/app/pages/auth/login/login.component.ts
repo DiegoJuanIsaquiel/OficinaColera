@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
 import { environment } from '../../../../environments/environment';
+import { versionName } from '../../../../environments/version';
 import { TokenProxy } from '../../../models/proxys/token.proxy';
 import { UserProxy } from '../../../models/proxys/user.proxy';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
@@ -50,6 +51,8 @@ export class LoginComponent {
   public shouldHidePassword = true;
 
   public isLoadingLogin: boolean = false;
+
+  public version: string = versionName;
 
   //#endregion
 
