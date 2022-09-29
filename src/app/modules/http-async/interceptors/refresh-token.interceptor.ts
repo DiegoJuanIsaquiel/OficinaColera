@@ -30,7 +30,8 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
     private readonly router: Router,
     private readonly toast: NbToastrService,
     private readonly user: UserService,
-  ) { }
+  ) {
+  }
 
   //#endregion
 
@@ -47,13 +48,15 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
 
     const canPerformRequest$ = of(localStorage.getItem(environment.keys.token)).pipe(
       map(token => {
-        if (!token)
+        const refreshToken = localStorage.getItem(environment.keys.refreshToken);
+
+        if (!token || !refreshToken)
           return of(true);
 
         type JWTDecoded = { exp: number };
 
         const jwtPayload: JWTDecoded = decode(token);
-        const refreshJwtPayload: JWTDecoded = decode(token);
+        const refreshJwtPayload: JWTDecoded = decode(refreshToken);
 
         const fiveMinutesInMilliseconds = 1_000 * 5;
         const maxSafeExpiresDate = +new Date() + fiveMinutesInMilliseconds;
@@ -72,7 +75,7 @@ export class RefreshTokenInterceptor implements HttpInterceptor {
         if (!canRefreshToken)
           return of(false);
 
-        return from(this.tryRefreshToken(localStorage.getItem(environment.keys.refreshToken) || ''));
+        return from(this.tryRefreshToken(refreshToken));
       }),
       concatAll(),
     );
