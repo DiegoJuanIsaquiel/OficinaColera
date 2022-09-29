@@ -1,3 +1,8 @@
+import { CrudRequestResponseProxy } from "../../models/proxys/base/crud-request-response.proxy";
+import { AsyncResult } from "../../modules/http-async/models/async-result";
+import { HttpAsyncService } from "../../modules/http-async/services/http-async.service";
+import { delay } from "./functions";
+
 /**
  * Representa os parâmetros de uma requisição GetMany
  */
@@ -205,22 +210,22 @@ export function createCrudParams<T>(params: CrudRequestParams<T>): string {
   const qs: string[] = [];
 
   if (params.fields)
-    qs.push(`fields=${ encodeURIComponent(params.fields.join(',')) }`);
+    qs.push(`fields=${encodeURIComponent(params.fields.join(','))}`);
 
   if (params.search)
-    qs.push(`s=${ encodeURIComponent(JSON.stringify(params.search)) }`);
+    qs.push(`s=${encodeURIComponent(JSON.stringify(params.search))}`);
 
   if (params.limit)
-    qs.push(`limit=${ params.limit }`);
+    qs.push(`limit=${params.limit}`);
 
   if (params.page)
-    qs.push(`page=${ params.page }`);
+    qs.push(`page=${params.page}`);
 
   if (params.join)
-    params.join.forEach((j, i) => qs.push(`join[${ i }]=${ encodeURIComponent(j) }`));
+    params.join.forEach((j, i) => qs.push(`join[${i}]=${encodeURIComponent(j)}`));
 
   if (params.sort)
-    params.sort.forEach((s, i) => qs.push(`sort[${ i }]=${ encodeURIComponent(s.field + ',' + s.order) }`));
+    params.sort.forEach((s, i) => qs.push(`sort[${i}]=${encodeURIComponent(s.field + ',' + s.order)}`));
 
   return qs.join('&');
 }
@@ -233,4 +238,52 @@ export function createCrudParams<T>(params: CrudRequestParams<T>): string {
  */
 export function createCrudUrl<T>(endpoint: string, params: CrudRequestParams<T> = {}): string {
   return endpoint + '?' + createCrudParams<T>(params);
+}
+
+/**
+ * Método que busca todos os dados de uma API com suporte a paginação
+ * 
+ * @example\`\`\`typescript
+ * const items: ItemProxy[] = getPaginatedCrudData<ItemProxy>(this.http, '/items?page={page}&limit={limit}', 100);
+ * \`\`\`
+ * 
+ * @param http O serviço HTTP para realizar as requisições
+ * @param baseUrl O URL para ser feito as requisições. Nota: deve ser incluido os query params page e limit com os valores {page} e {limit}.
+ * @param limitPerPage O limite de itens por paginação. Certifique-se de ser menor que o limite máximo da API, se não dará erro.
+ */
+export async function getPaginatedCrudData<T>(http: HttpAsyncService, baseUrl: string, limitPerPage: number = 200): Promise<AsyncResult<T[]>> {
+  const maxRetries = 5;
+  let currentRetries = 0;
+
+  const run: (page: number) => Promise<AsyncResult<T[]>> = async (page: number) => {
+    const url = baseUrl
+      .replace('{page}', String(page))
+      .replace('{limit}', String(limitPerPage));
+
+    const { error, success } = await http.get<CrudRequestResponseProxy<T> | T[]>(url);
+
+    if (error) {
+      currentRetries++;
+
+      if (currentRetries < maxRetries)
+        return delay(1000).then(async () => await run(page));
+
+      return { error };
+    }
+
+    const items = Array.isArray(success) ? success : success!.data;
+
+    if (items.length >= limitPerPage) {
+      const { error: nextError, success: nextSuccess } = await run(page + 1);
+
+      if (nextError)
+        return { error: nextError };
+
+      return { success: [...items, ...nextSuccess!] };
+    }
+
+    return { success: items };
+  };
+
+  return await run(1);
 }
