@@ -21,7 +21,7 @@ export class BaseUserComponent {
     this.formGroup = formBuilder.group({
       email: ['', Validators.required],
       password: this.isUpdate ? [''] : ['', Validators.required],
-      roles: ['none', Validators.required],
+      roles: [[], Validators.required],
       isActive: [true],
     });
   }
