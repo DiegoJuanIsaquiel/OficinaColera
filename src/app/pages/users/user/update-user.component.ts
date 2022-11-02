@@ -8,6 +8,7 @@ import { environment } from '../../../../environments/environment';
 import { UserProxy } from '../../../models/proxys/user.proxy';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
 import { getCrudErrors } from '../../../shared/utils/functions';
+import { apiRoutes } from '../../../../environments/api-routes';
 import { BaseUserComponent } from './base-user.component';
 
 //#endregion
@@ -42,7 +43,7 @@ export class UpdateUserComponent extends BaseUserComponent implements OnInit {
     this.showLoading = true;
 
     const entityId = this.route.snapshot.paramMap.get('entityId');
-    const url = environment.api.users.get.replace('{userId}', entityId ?? '0');
+    const url = apiRoutes.users.get.replace('{userId}', entityId ?? '0');
     const { error, success: entity } = await this.http.get<UserProxy>(url);
 
     this.showLoading = false;
@@ -64,7 +65,7 @@ export class UpdateUserComponent extends BaseUserComponent implements OnInit {
 
     const payload = this.formGroup.getRawValue();
     const entityId = this.route.snapshot.paramMap.get('entityId');
-    const url = environment.api.users.update.replace('{userId}', entityId ?? '0');
+    const url = apiRoutes.users.update.replace('{userId}', entityId ?? '0');
     const { error } = await this.http.put<UserProxy>(url, payload);
 
     this.showLoading = false;

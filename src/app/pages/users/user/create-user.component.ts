@@ -4,9 +4,9 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
-import { environment } from '../../../../environments/environment';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
 import { getCrudErrors } from '../../../shared/utils/functions';
+import { apiRoutes } from '../../../../environments/api-routes';
 import { BaseUserComponent } from './base-user.component';
 
 //#endregion
@@ -38,7 +38,7 @@ export class CreateUserComponent extends BaseUserComponent {
     this.showLoading = true;
 
     const payload = this.formGroup.getRawValue();
-    const { error } = await this.http.post(environment.api.users.create, payload);
+    const { error } = await this.http.post(apiRoutes.users.create, payload);
 
     this.showLoading = false;
 

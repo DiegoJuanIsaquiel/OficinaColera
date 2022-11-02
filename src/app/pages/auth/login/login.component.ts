@@ -12,6 +12,7 @@ import { HttpAsyncService } from '../../../modules/http-async/services/http-asyn
 import { AuthService } from '../../../services/auth/auth.service';
 import { UserService } from '../../../services/user/user.service';
 import { getCrudErrors } from '../../../shared/utils/functions';
+import { apiRoutes } from '../../../../environments/api-routes';
 
 //#endregion
 
@@ -64,7 +65,7 @@ export class LoginComponent {
 
     this.isLoadingLogin = true;
 
-    const { error, success } = await this.http.post<TokenProxy>(environment.api.auth.login, this.formGroup.getRawValue());
+    const { error, success } = await this.http.post<TokenProxy>(apiRoutes.auth.login, this.formGroup.getRawValue());
 
     this.isLoadingLogin = false;
 
@@ -85,7 +86,7 @@ export class LoginComponent {
   private async refreshUser(): Promise<void> {
     this.isLoadingLogin = true;
 
-    const { error: userError, success: user } = await this.http.get<UserProxy>(environment.api.users.me);
+    const { error: userError, success: user } = await this.http.get<UserProxy>(apiRoutes.users.me);
 
     this.isLoadingLogin = false;
 

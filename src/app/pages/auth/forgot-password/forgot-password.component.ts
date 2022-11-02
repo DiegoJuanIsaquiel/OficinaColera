@@ -4,13 +4,13 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
-import { environment } from '../../../../environments/environment';
 import { ForgotPasswordStepsEnum } from '../../../models/enums/forgot-password-steps.enum';
 import { ResetPasswordPayload } from '../../../models/payloads/reset-password.payload';
 import { UserProxy } from '../../../models/proxys/user.proxy';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
 import { CustomValidators } from '../../../shared/utils/custom-validators';
 import { getCrudErrors } from '../../../shared/utils/functions';
+import { apiRoutes } from '../../../../environments/api-routes';
 
 //#endregion
 
@@ -62,7 +62,7 @@ export class ForgotPasswordComponent {
     this.isLoading = true;
 
     const email = this.formGroup.getRawValue().email;
-    const url = environment.api.userPassword.forgotPassword.replace('{email}', email);
+    const url = apiRoutes.userPassword.forgotPassword.replace('{email}', email);
 
     const { error } = await this.http.post<UserProxy>(url, {});
 
@@ -91,7 +91,7 @@ export class ForgotPasswordComponent {
       newPassword,
     };
 
-    const url = environment.api.userPassword.resetPassword.replace('{resetPasswordCode}', code);
+    const url = apiRoutes.userPassword.resetPassword.replace('{resetPasswordCode}', code);
 
     const { error } = await this.http.post<UserProxy>(url, payload);
 
