@@ -29,7 +29,7 @@ pipeline {
                     sh "apk add openssh"
                     sh "echo $SONAR_TOKEN"
                     checkout scm
-                    sh "sonar-scanner -Dsonar.projectKey=liga.backoffice.angular.base-template -Dsonar.sources=. -Dsonar.host.url=https://sonarqube.ligafacens.com"
+                    sh "sonar-scanner -Dsonar.projectKey=liga.backoffice.angular.base-template -Dsonar.sources=src -Dsonar.host.url=https://sonarqube.ligafacens.com"
                 }
             }
         }
