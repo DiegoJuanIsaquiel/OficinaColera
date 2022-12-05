@@ -1,0 +1,52 @@
+pipeline {
+        agent {
+            label 'sonar-agent-scanner'
+        }
+        options { 
+            skipDefaultCheckout true
+            buildDiscarder logRotator(
+                artifactDaysToKeepStr: '', 
+                artifactNumToKeepStr: '', 
+                daysToKeepStr: '', 
+                numToKeepStr: '5'
+                )
+            timeout(
+                activity: true, 
+                time: 30
+                )
+            disableConcurrentBuilds()    
+        }
+        
+        parameters {
+            text defaultValue: 'sqp_39e9995d016d4140cc7a85794f6290c5641ee804', name: 'SONAR_TOKEN'
+        }
+        stages {
+            stage('sonarqube-scan') {
+                when {
+                    branch 'master'
+                }
+                steps {
+                    sh "apk add openssh"
+                    sh "echo $SONAR_TOKEN"
+                    checkout scm
+                    sh "sonar-scanner -Dsonar.projectKey=liga.backoffice.angular.base-template -Dsonar.sources=. -Dsonar.host.url=https://sonarqube.ligafacens.com"
+                }
+            }
+        }
+        post {
+            always {
+                 cleanWs(
+                    cleanWhenAborted: true,
+                    cleanWhenFailure: true,
+                    cleanWhenNotBuilt: true,
+                    cleanWhenSuccess: true,
+                    cleanWhenUnstable: true,
+                    deleteDirs: true,
+                    notFailBuild: true,
+                    disableDeferredWipeout: true,
+                    patterns: [[pattern: 'node_modules', type: 'EXCLUDE']]
+					
+                 )
+            }
+        }
+    }
