@@ -1,6 +1,6 @@
 //#region Imports
 
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
 
@@ -11,17 +11,17 @@ export class BaseUserComponent {
   //#region Constructor
 
   constructor(
-    protected readonly formBuilder: UntypedFormBuilder,
+    protected readonly formBuilder: FormBuilder,
     protected readonly route: ActivatedRoute,
     protected readonly http: HttpAsyncService,
   ) {
     this.backUrl = this.route.snapshot.queryParamMap.get('backUrl') || '/pages/users';
     this.isUpdate = route.snapshot.paramMap.has('entityId');
 
-    this.formGroup = formBuilder.group({
+    this.formGroup = formBuilder.nonNullable.group({
       email: ['', Validators.required],
       password: this.isUpdate ? [''] : ['', Validators.required],
-      roles: [[], Validators.required],
+      roles: [[] as string[], Validators.required],
       isActive: [true],
     });
   }
@@ -34,7 +34,8 @@ export class BaseUserComponent {
   public showLoading: boolean = false;
 
   public backUrl: string;
-  public formGroup: UntypedFormGroup;
+
+  public formGroup: FormGroup<{ email: FormControl<string>; password: FormControl<string>; roles: FormControl<string[]>; isActive: FormControl<boolean> }>;
 
   //endregion
 

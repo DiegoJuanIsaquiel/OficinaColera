@@ -1,16 +1,16 @@
 //#region Imports
 
 import { Component } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
+import { apiRoutes } from '../../../../environments/api-routes';
 import { ForgotPasswordStepsEnum } from '../../../models/enums/forgot-password-steps.enum';
 import { ResetPasswordPayload } from '../../../models/payloads/reset-password.payload';
 import { UserProxy } from '../../../models/proxys/user.proxy';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
 import { CustomValidators } from '../../../shared/utils/custom-validators';
 import { getCrudErrors } from '../../../shared/utils/functions';
-import { apiRoutes } from '../../../../environments/api-routes';
 
 //#endregion
 
@@ -24,12 +24,12 @@ export class ForgotPasswordComponent {
   //#region Constructor
 
   constructor(
-    protected readonly formBuilder: UntypedFormBuilder,
+    protected readonly formBuilder: FormBuilder,
     protected readonly router: Router,
     protected readonly http: HttpAsyncService,
     protected readonly toast: NbToastrService,
   ) {
-    this.formGroup = this.formBuilder.group({
+    this.formGroup = this.formBuilder.nonNullable.group({
       email: ['', [Validators.required, Validators.email]],
       code: [''],
       newPassword: ['', [Validators.required, Validators.minLength(6)]],
@@ -45,7 +45,7 @@ export class ForgotPasswordComponent {
 
   public isLoading: boolean = false;
 
-  public formGroup: UntypedFormGroup;
+  public formGroup: FormGroup<{ email: FormControl<string>; code: FormControl<string>; newPassword: FormControl<string>; confirmPassword: FormControl<string> }>;
 
   public currentStep: ForgotPasswordStepsEnum = ForgotPasswordStepsEnum.EMAIL;
 
