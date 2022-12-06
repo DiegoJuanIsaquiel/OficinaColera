@@ -1,8 +1,8 @@
-import { FormGroup, ValidationErrors } from '@angular/forms';
+import { UntypedFormGroup, ValidationErrors } from '@angular/forms';
 
 export namespace CustomValidators {
-  export function mustMatch(controlName: string, matchingControlName: string): (formGroup: FormGroup) => ValidationErrors | null {
-    return (formGroup: FormGroup) => {
+  export function mustMatch(controlName: string, matchingControlName: string): (formGroup: UntypedFormGroup) => ValidationErrors | null {
+    return (formGroup: UntypedFormGroup) => {
       const control = formGroup.controls[controlName];
       const matchingControl = formGroup.controls[matchingControlName];
 

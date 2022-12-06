@@ -1,7 +1,7 @@
 //#region Imports
 
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
 import { environment } from '../../../../environments/environment';
@@ -25,7 +25,7 @@ export class UpdateUserComponent extends BaseUserComponent implements OnInit {
   constructor(
     protected readonly router: Router,
     protected readonly toast: NbToastrService,
-    formBuilder: FormBuilder,
+    formBuilder: UntypedFormBuilder,
     route: ActivatedRoute,
     http: HttpAsyncService,
   ) {

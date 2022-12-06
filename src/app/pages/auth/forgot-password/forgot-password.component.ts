@@ -1,7 +1,7 @@
 //#region Imports
 
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
 import { ForgotPasswordStepsEnum } from '../../../models/enums/forgot-password-steps.enum';
@@ -24,7 +24,7 @@ export class ForgotPasswordComponent {
   //#region Constructor
 
   constructor(
-    protected readonly formBuilder: FormBuilder,
+    protected readonly formBuilder: UntypedFormBuilder,
     protected readonly router: Router,
     protected readonly http: HttpAsyncService,
     protected readonly toast: NbToastrService,
@@ -45,7 +45,7 @@ export class ForgotPasswordComponent {
 
   public isLoading: boolean = false;
 
-  public formGroup: FormGroup;
+  public formGroup: UntypedFormGroup;
 
   public currentStep: ForgotPasswordStepsEnum = ForgotPasswordStepsEnum.EMAIL;
 

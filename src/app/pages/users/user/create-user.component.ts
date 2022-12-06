@@ -1,7 +1,7 @@
 //#region Imports
 
 import { Component } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
@@ -23,7 +23,7 @@ export class CreateUserComponent extends BaseUserComponent {
   constructor(
     protected readonly router: Router,
     protected readonly toast: NbToastrService,
-    formBuilder: FormBuilder,
+    formBuilder: UntypedFormBuilder,
     route: ActivatedRoute,
     http: HttpAsyncService,
   ) {

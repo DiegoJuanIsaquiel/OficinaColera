@@ -1,7 +1,7 @@
 //#region Imports
 
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
 import { environment } from '../../../../environments/environment';
@@ -30,7 +30,7 @@ export class LoginComponent {
     private readonly route: ActivatedRoute,
     private readonly http: HttpAsyncService,
     private readonly toast: NbToastrService,
-    private readonly formBuilder: FormBuilder,
+    private readonly formBuilder: UntypedFormBuilder,
     private readonly auth: AuthService,
     private readonly user: UserService,
   ) {
@@ -47,7 +47,7 @@ export class LoginComponent {
 
   //#region Public Properties
 
-  public formGroup: FormGroup;
+  public formGroup: UntypedFormGroup;
 
   public shouldHidePassword = true;
 

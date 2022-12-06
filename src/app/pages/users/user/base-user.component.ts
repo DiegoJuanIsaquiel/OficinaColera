@@ -1,6 +1,6 @@
 //#region Imports
 
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
 
@@ -11,7 +11,7 @@ export class BaseUserComponent {
   //#region Constructor
 
   constructor(
-    protected readonly formBuilder: FormBuilder,
+    protected readonly formBuilder: UntypedFormBuilder,
     protected readonly route: ActivatedRoute,
     protected readonly http: HttpAsyncService,
   ) {
@@ -34,7 +34,7 @@ export class BaseUserComponent {
   public showLoading: boolean = false;
 
   public backUrl: string;
-  public formGroup: FormGroup;
+  public formGroup: UntypedFormGroup;
 
   //endregion
 

@@ -112,7 +112,6 @@
       }
     }
   },
-  "defaultProject": "backoffice",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "ngx",
