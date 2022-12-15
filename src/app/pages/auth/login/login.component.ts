@@ -1,18 +1,20 @@
 //#region Imports
 
 import { Component } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
+import { apiRoutes } from '../../../../environments/api-routes';
 import { environment } from '../../../../environments/environment';
 import { versionName } from '../../../../environments/version';
+import { LoginForm } from '../../../models/forms/login.form';
 import { TokenProxy } from '../../../models/proxys/token.proxy';
 import { UserProxy } from '../../../models/proxys/user.proxy';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
 import { AuthService } from '../../../services/auth/auth.service';
 import { UserService } from '../../../services/user/user.service';
+import { Formfy } from '../../../shared/utils/formfy';
 import { getCrudErrors } from '../../../shared/utils/functions';
-import { apiRoutes } from '../../../../environments/api-routes';
 
 //#endregion
 
@@ -30,11 +32,11 @@ export class LoginComponent {
     private readonly route: ActivatedRoute,
     private readonly http: HttpAsyncService,
     private readonly toast: NbToastrService,
-    private readonly formBuilder: UntypedFormBuilder,
+    private readonly formBuilder: FormBuilder,
     private readonly auth: AuthService,
     private readonly user: UserService,
   ) {
-    this.formGroup = this.formBuilder.group({
+    this.formGroup = this.formBuilder.nonNullable.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
     });
@@ -47,7 +49,7 @@ export class LoginComponent {
 
   //#region Public Properties
 
-  public formGroup: UntypedFormGroup;
+  public formGroup: Formfy<LoginForm>;
 
   public shouldHidePassword = true;
 

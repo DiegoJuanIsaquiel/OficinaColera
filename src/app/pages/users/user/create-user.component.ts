@@ -1,12 +1,12 @@
 //#region Imports
 
 import { Component } from '@angular/core';
-import { UntypedFormBuilder } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
+import { apiRoutes } from '../../../../environments/api-routes';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
 import { getCrudErrors } from '../../../shared/utils/functions';
-import { apiRoutes } from '../../../../environments/api-routes';
 import { BaseUserComponent } from './base-user.component';
 
 //#endregion
@@ -23,7 +23,7 @@ export class CreateUserComponent extends BaseUserComponent {
   constructor(
     protected readonly router: Router,
     protected readonly toast: NbToastrService,
-    formBuilder: UntypedFormBuilder,
+    formBuilder: FormBuilder,
     route: ActivatedRoute,
     http: HttpAsyncService,
   ) {

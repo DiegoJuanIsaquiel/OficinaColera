@@ -1,15 +1,17 @@
 //#region Imports
 
 import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
 import { apiRoutes } from '../../../../environments/api-routes';
 import { ForgotPasswordStepsEnum } from '../../../models/enums/forgot-password-steps.enum';
+import { ForgotPasswordForm } from '../../../models/forms/forgot-password.form';
 import { ResetPasswordPayload } from '../../../models/payloads/reset-password.payload';
 import { UserProxy } from '../../../models/proxys/user.proxy';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
 import { CustomValidators } from '../../../shared/utils/custom-validators';
+import { Formfy } from '../../../shared/utils/formfy';
 import { getCrudErrors } from '../../../shared/utils/functions';
 
 //#endregion
@@ -45,7 +47,7 @@ export class ForgotPasswordComponent {
 
   public isLoading: boolean = false;
 
-  public formGroup: FormGroup<{ email: FormControl<string>; code: FormControl<string>; newPassword: FormControl<string>; confirmPassword: FormControl<string> }>;
+  public formGroup: Formfy<ForgotPasswordForm>;
 
   public currentStep: ForgotPasswordStepsEnum = ForgotPasswordStepsEnum.EMAIL;
 
