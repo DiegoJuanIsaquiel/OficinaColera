@@ -4,11 +4,10 @@ import { Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NbToastrService } from '@nebular/theme';
-import { environment } from '../../../../environments/environment';
+import { apiRoutes } from '../../../../environments/api-routes';
 import { UserProxy } from '../../../models/proxys/user.proxy';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
 import { getCrudErrors } from '../../../shared/utils/functions';
-import { apiRoutes } from '../../../../environments/api-routes';
 import { BaseUserComponent } from './base-user.component';
 
 //#endregion

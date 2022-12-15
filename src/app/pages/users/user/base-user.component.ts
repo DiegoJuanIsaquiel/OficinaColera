@@ -1,8 +1,10 @@
 //#region Imports
 
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { BaseUserForm } from '../../../models/forms/base-user.form';
 import { HttpAsyncService } from '../../../modules/http-async/services/http-async.service';
+import { Formfy } from '../../../shared/utils/formfy';
 
 //#endregion
 
@@ -35,7 +37,7 @@ export class BaseUserComponent {
 
   public backUrl: string;
 
-  public formGroup: FormGroup<{ email: FormControl<string>; password: FormControl<string>; roles: FormControl<string[]>; isActive: FormControl<boolean> }>;
+  public formGroup: Formfy<BaseUserForm, 'roles'>;
 
   //endregion
 
