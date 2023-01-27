@@ -31,7 +31,7 @@ pipeline {
                 }
                 steps {
                     sh '''pwd
-                          aws ec2 start-instances --instance-ids $INSTANCE_ID
+                          aws --region us-east-1 ec2 start-instances --instance-ids $INSTANCE_ID
                           echo Instance $INSTANCE_ID Started
                         '''
                 }
@@ -71,7 +71,7 @@ pipeline {
                 }
                 steps {
                     catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                        sh '''aws ec2 stop-instances --instance-ids $INSTANCE_ID
+                        sh '''aws ec2 --region us-east-1 stop-instances --instance-ids $INSTANCE_ID
                             echo Instance $INSTANCE_ID Stopped
                         '''
                     }
