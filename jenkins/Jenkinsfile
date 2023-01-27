@@ -77,28 +77,4 @@ pipeline {
                 }
             }
         }
-        
-
-        
-        post {
-            agent {
-                    label 'sonar-agent-scanner'
-            }
-            always {
-
-                cleanWs(
-                    cleanWhenAborted: true,
-                    cleanWhenFailure: true,
-                    cleanWhenNotBuilt: true,
-                    cleanWhenSuccess: true,
-                    cleanWhenUnstable: true,
-                    deleteDirs: true,
-                    notFailBuild: true,
-                    disableDeferredWipeout: true,
-                    patterns: [[pattern: 'node_modules', type: 'EXCLUDE']]
-					
-                 )
-
-            }
-        }
     }
