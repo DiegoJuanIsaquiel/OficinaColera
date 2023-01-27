@@ -30,7 +30,8 @@ pipeline {
                     branch 'master'
                 }
                 steps {
-                    sh '''aws ec2 start-instances --instance-ids $INSTANCE_ID
+                    sh '''pwd
+                          aws ec2 start-instances --instance-ids $INSTANCE_ID
                           echo Instance $INSTANCE_ID Started
                         '''
                 }
