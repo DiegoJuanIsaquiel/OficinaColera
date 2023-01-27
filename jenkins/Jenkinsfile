@@ -81,7 +81,9 @@ pipeline {
 
         
         post {
-
+            agent {
+                    label 'sonar-agent-scanner'
+            }
             always {
 
                 cleanWs(
