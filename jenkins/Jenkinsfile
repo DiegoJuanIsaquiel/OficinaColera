@@ -1,7 +1,4 @@
 pipeline {
-        agent {
-            label 'sonar-agent-scanner'
-        }
         options { 
             skipDefaultCheckout true
             buildDiscarder logRotator(
@@ -48,6 +45,9 @@ pipeline {
             }
             
             stage('sonarqube-scan') {
+                 agent {
+                    label 'sonar-agent-scanner'
+                }
                 when {
                     branch 'master'
                 }
