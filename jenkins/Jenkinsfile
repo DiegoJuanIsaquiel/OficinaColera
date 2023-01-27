@@ -24,6 +24,9 @@ pipeline {
 
         stages {
               stage('start-ec2-agent') {
+                agent {
+                     label 'shell-command'
+                }
                 when {
                     branch 'master'
                 }
@@ -46,6 +49,23 @@ pipeline {
                 }
             }
         }
+        
+         stage('stop-ec2-agent') {
+                agent {
+                     label 'shell-command'
+                }
+                when {
+                    branch 'master'
+                }
+                steps {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                        sh '''aws ec2 stop-instances --instance-ids $INSTANCE_ID
+                            echo Instance $INSTANCE_ID Stopped
+                        '''
+                    }
+                }
+            }
+        
         post {
 
             always {
@@ -62,16 +82,7 @@ pipeline {
                     patterns: [[pattern: 'node_modules', type: 'EXCLUDE']]
 					
                  )
-                 
-                cleanup {
-                    steps {
-    
-                        sh '''aws ec2 stop-instances --instance-ids $INSTANCE_ID
-                              echo Instance $INSTANCE_ID Stopped
-                                '''
-                    }
-                  }
-                
+
             }
         }
     }
