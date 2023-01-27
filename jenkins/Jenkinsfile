@@ -1,4 +1,5 @@
 pipeline {
+        agent none
         options { 
             skipDefaultCheckout true
             buildDiscarder logRotator(
@@ -21,7 +22,8 @@ pipeline {
 
         stages {
               stage('start-ec2-agent') {
-                agent {
+              
+               agent {
                      label 'shell-command'
                 }
                 when {
