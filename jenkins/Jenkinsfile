@@ -48,9 +48,8 @@ pipeline {
                     sh "sonar-scanner -Dsonar.projectKey=liga.backoffice.angular.base-template -Dsonar.sources=src -Dsonar.host.url=https://sonarqube.ligafacens.com"
                 }
             }
-        }
-        
-         stage('stop-ec2-agent') {
+            
+            stage('stop-ec2-agent') {
                 agent {
                      label 'shell-command'
                 }
@@ -65,6 +64,9 @@ pipeline {
                     }
                 }
             }
+        }
+        
+
         
         post {
 
