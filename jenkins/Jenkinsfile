@@ -37,9 +37,14 @@ pipeline {
                 }
             }
             
-            stage ("wait-ec2-startup")
-            {
-               sleep(time:120,unit:"SECONDS")
+            stage('wait-ec2-start') {
+
+                when {
+                    branch 'master'
+                }
+                steps {
+                    sleep(time:120,unit:"SECONDS")
+                }
             }
             
             stage('sonarqube-scan') {
