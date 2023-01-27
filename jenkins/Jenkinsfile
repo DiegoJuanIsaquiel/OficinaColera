@@ -24,24 +24,13 @@ pipeline {
 
         stages {
               stage('start-ec2-agent') {
-                environment {
-	                STATE = "Start"
-
-    	        }
                 when {
                     branch 'master'
                 }
                 steps {
-                    sh '''if [ "$STATE" = "Start" ]
-                            then
-                              aws ec2 start-instances --instance-ids $INSTANCE_ID
-                              echo Instance $INSTANCE_ID Started
-                            elif [ "$State" = "Stop" ]
-                            then
-                              aws ec2 stop-instances --instance-ids $INSTANCE_ID
-                              echo Instance $INSTANCE_ID Stopped
-                            fi
-                            '''
+                    sh '''aws ec2 start-instances --instance-ids $INSTANCE_ID
+                          echo Instance $INSTANCE_ID Started
+                        '''
                 }
             }
             
@@ -59,9 +48,6 @@ pipeline {
         }
         post {
 
-           environment {
-                STATE = "Stop"
-    	    }
             always {
 
                 cleanWs(
@@ -80,15 +66,8 @@ pipeline {
                 cleanup {
                     steps {
     
-                        sh '''if [ "$STATE" = "Stop" ]
-                                then
-                                  aws ec2 start-instances --instance-ids $INSTANCE_ID
-                                  echo Instance $INSTANCE_ID Started
-                                elif [ "$State" = "Stop" ]
-                                then
-                                  aws ec2 stop-instances --instance-ids $INSTANCE_ID
-                                  echo Instance $INSTANCE_ID Stopped
-                                fi
+                        sh '''aws ec2 stop-instances --instance-ids $INSTANCE_ID
+                              echo Instance $INSTANCE_ID Stopped
                                 '''
                     }
                   }
