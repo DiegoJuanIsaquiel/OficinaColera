@@ -58,11 +58,12 @@ pipeline {
             }
         }
         post {
-            always {
-                 environment {
-	                STATE = "Stop"
 
-    	        }
+           environment {
+                STATE = "Stop"
+    	    }
+            always {
+
                 cleanWs(
                     cleanWhenAborted: true,
                     cleanWhenFailure: true,
