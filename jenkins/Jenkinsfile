@@ -63,7 +63,7 @@ pipeline {
 	                STATE = "Stop"
 
     	        }
-                 cleanWs(
+                cleanWs(
                     cleanWhenAborted: true,
                     cleanWhenFailure: true,
                     cleanWhenNotBuilt: true,
@@ -75,18 +75,22 @@ pipeline {
                     patterns: [[pattern: 'node_modules', type: 'EXCLUDE']]
 					
                  )
-
-
-                    sh '''if [ "$STATE" = "Stop" ]
-                            then
-                              aws ec2 start-instances --instance-ids $INSTANCE_ID
-                              echo Instance $INSTANCE_ID Started
-                            elif [ "$State" = "Stop" ]
-                            then
-                              aws ec2 stop-instances --instance-ids $INSTANCE_ID
-                              echo Instance $INSTANCE_ID Stopped
-                            fi
-                            '''
+                 
+                cleanup {
+                    steps {
+    
+                        sh '''if [ "$STATE" = "Stop" ]
+                                then
+                                  aws ec2 start-instances --instance-ids $INSTANCE_ID
+                                  echo Instance $INSTANCE_ID Started
+                                elif [ "$State" = "Stop" ]
+                                then
+                                  aws ec2 stop-instances --instance-ids $INSTANCE_ID
+                                  echo Instance $INSTANCE_ID Stopped
+                                fi
+                                '''
+                    }
+                  }
                 
             }
         }
