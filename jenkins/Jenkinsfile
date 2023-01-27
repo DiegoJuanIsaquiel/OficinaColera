@@ -76,7 +76,7 @@ pipeline {
 					
                  )
 
-                steps {
+
                     sh '''if [ "$STATE" = "Stop" ]
                             then
                               aws ec2 start-instances --instance-ids $INSTANCE_ID
@@ -87,7 +87,7 @@ pipeline {
                               echo Instance $INSTANCE_ID Stopped
                             fi
                             '''
-                }
+                
             }
         }
     }
