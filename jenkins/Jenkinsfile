@@ -19,8 +19,32 @@ pipeline {
         
         parameters {
             text defaultValue: 'sqp_39e9995d016d4140cc7a85794f6290c5641ee804', name: 'SONAR_TOKEN'
+            text defaultValue: 'i-0c37a4962820b562c', name: 'INSTANCE_ID'
         }
+
         stages {
+              stage('start-ec2-agent') {
+                environment {
+	                STATE = "Start"
+
+    	        }
+                when {
+                    branch 'master'
+                }
+                steps {
+                    sh '''if [ "$STATE" = "Start" ]
+                            then
+                              aws ec2 start-instances --instance-ids $INSTANCE_ID
+                              echo Instance $INSTANCE_ID Started
+                            elif [ "$State" = "Stop" ]
+                            then
+                              aws ec2 stop-instances --instance-ids $INSTANCE_ID
+                              echo Instance $INSTANCE_ID Stopped
+                            fi
+                            '''
+                }
+            }
+            
             stage('sonarqube-scan') {
                 when {
                     branch 'master'
@@ -35,6 +59,10 @@ pipeline {
         }
         post {
             always {
+                 environment {
+	                STATE = "Stop"
+
+    	        }
                  cleanWs(
                     cleanWhenAborted: true,
                     cleanWhenFailure: true,
@@ -47,6 +75,19 @@ pipeline {
                     patterns: [[pattern: 'node_modules', type: 'EXCLUDE']]
 					
                  )
+
+                steps {
+                    sh '''if [ "$STATE" = "Stop" ]
+                            then
+                              aws ec2 start-instances --instance-ids $INSTANCE_ID
+                              echo Instance $INSTANCE_ID Started
+                            elif [ "$State" = "Stop" ]
+                            then
+                              aws ec2 stop-instances --instance-ids $INSTANCE_ID
+                              echo Instance $INSTANCE_ID Stopped
+                            fi
+                            '''
+                }
             }
         }
     }
