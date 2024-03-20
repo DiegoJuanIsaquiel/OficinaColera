@@ -1,0 +1,94 @@
+{
+  "name": "@liga/backoffice",
+  "version": "1.0.2",
+  "private": true,
+  "scripts": {
+    "preinstall": "npx npm-force-resolutions",
+    "prepare": "husky install",
+    "ng": "ng",
+    "start": "ng serve --configuration hmr --hmr",
+    "build": "ng build",
+    "build:prod": "npm run build -- --configuration production --aot",
+    "release": "cross-env HUSKY=0 node scripts/release.js",
+    "deploy:aws": "node aws-deploy.js",
+    "lint": "ng lint",
+    "lint:fix": "ng lint backoffice --fix",
+    "lint:styles": "stylelint ./src/**/*.scss",
+    "lint:ci": "npm run lint && npm run lint:styles"
+  },
+  "engines": {
+    "node": "16.x"
+  },
+  "dependencies": {
+    "@angular/animations": "14.2.12",
+    "@angular/cdk": "14.2.7",
+    "@angular/common": "14.2.12",
+    "@angular/compiler": "14.2.12",
+    "@angular/core": "14.2.12",
+    "@angular/forms": "14.2.12",
+    "@angular/material": "14.2.7",
+    "@angular/platform-browser": "14.2.12",
+    "@angular/platform-browser-dynamic": "14.2.12",
+    "@angular/router": "14.2.12",
+    "@nebular/auth": "10.0.0",
+    "@nebular/eva-icons": "10.0.0",
+    "@nebular/security": "10.0.0",
+    "@nebular/theme": "10.0.0",
+    "@nestjsx/crud-request": "4.6.2",
+    "bootstrap": "4.6.1",
+    "core-js": "2.6.12",
+    "eva-icons": "1.1.3",
+    "jwt-decode": "3.1.2",
+    "nebular-icons": "1.1.0",
+    "pace-js": "1.2.4",
+    "roboto-fontface": "~0.10.0",
+    "rxjs": "7.5.5",
+    "style-loader": "1.3.0",
+    "tslib": "2.4.0",
+    "xlsx": "0.18.5",
+    "zone.js": "~0.11.6"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "14.2.10",
+    "@angular-eslint/builder": "14.4.0",
+    "@angular-eslint/eslint-plugin": "14.4.0",
+    "@angular-eslint/eslint-plugin-template": "14.4.0",
+    "@angular-eslint/schematics": "14.4.0",
+    "@angular-eslint/template-parser": "14.4.0",
+    "@angular/cli": "14.2.10",
+    "@angular/compiler-cli": "14.2.12",
+    "@angular/language-service": "14.2.12",
+    "@jsdevtools/ez-spawn": "3.0.4",
+    "@jsdevtools/version-bump-prompt": "6.1.0",
+    "@types/node": "16.18.6",
+    "@types/xlsx": "0.0.36",
+    "@typescript-eslint/eslint-plugin": "5.11.0",
+    "@typescript-eslint/parser": "5.12.0",
+    "acorn": "8.7.1",
+    "auto-changelog": "2.4.0",
+    "capacitor-set-version": "2.0.3",
+    "commitizen": "4.2.4",
+    "cross-env": "7.0.3",
+    "cz-conventional-changelog": "3.3.0",
+    "eslint": "8.8.0",
+    "eslint-plugin-import": "2.25.4",
+    "eslint-plugin-jsdoc": "37.8.2",
+    "eslint-plugin-prefer-arrow": "1.2.3",
+    "husky": "7.0.4",
+    "rimraf": "3.0.2",
+    "stylelint": "14.5.0",
+    "ts-node": "10.5.0",
+    "typescript": "4.8.4"
+  },
+  "resolutions": {
+    "ansi-regex": "5.0.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "lint-staged": {
+    "*.ts": "eslint --cache --cache-location .eslintcache --fix"
+  }
+}

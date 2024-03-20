@@ -1,0 +1,28 @@
+@import './themes';
+
+@mixin nb-overrides() {
+  nb-select.size-medium button {
+    padding: 0.4375rem 2.2rem 0.4375rem 1.125rem !important;
+
+    nb-icon {
+      right: 0.41rem !important;
+    }
+  }
+
+  nb-spinner.status-basic {
+    background-color: rgba(0, 0, 0, .3) !important;
+  }
+
+  nb-spinner.status-basic .spin-circle {
+    border-top-color: #fff !important;
+    border-right-color: transparent !important;
+    border-bottom-color: #fff !important;
+    border-left-color: transparent !important;
+  }
+}
+
+.w-md-auto {
+  @media(min-width: 768px) {
+    width: auto !important;
+  }
+}

@@ -1,0 +1,81 @@
+pipeline {
+        agent none
+        options { 
+            skipDefaultCheckout true
+            buildDiscarder logRotator(
+                artifactDaysToKeepStr: '', 
+                artifactNumToKeepStr: '', 
+                daysToKeepStr: '', 
+                numToKeepStr: '5'
+                )
+            timeout(
+                activity: true, 
+                time: 30
+                )
+            disableConcurrentBuilds()    
+        }
+        
+        parameters {
+            text defaultValue: 'sqp_39e9995d016d4140cc7a85794f6290c5641ee804', name: 'SONAR_TOKEN'
+            text defaultValue: 'i-0c37a4962820b562c', name: 'INSTANCE_ID'
+        }
+
+        stages {
+              stage('start-ec2-agent') {
+              
+               agent {
+                     label 'shell-command'
+                }
+                when {
+                    branch 'master'
+                }
+                steps {
+                    sh '''pwd
+                          aws --region us-east-1 ec2 start-instances --instance-ids $INSTANCE_ID
+                          echo Instance $INSTANCE_ID Started
+                        '''
+                }
+            }
+            
+            stage('wait-ec2-start') {
+
+                when {
+                    branch 'master'
+                }
+                steps {
+                    sleep(time:120,unit:"SECONDS")
+                }
+            }
+            
+            stage('sonarqube-scan') {
+                 agent {
+                    label 'sonar-agent-scanner'
+                }
+                when {
+                    branch 'master'
+                }
+                steps {
+                    sh "apk add openssh"
+                    sh "echo $SONAR_TOKEN"
+                    checkout scm
+                    sh "sonar-scanner -Dsonar.projectKey=liga.backoffice.angular.base-template -Dsonar.sources=src -Dsonar.host.url=https://sonarqube.ligafacens.com"
+                }
+            }
+            
+            stage('stop-ec2-agent') {
+                agent {
+                     label 'shell-command'
+                }
+                when {
+                    branch 'master'
+                }
+                steps {
+                    catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+                        sh '''aws ec2 --region us-east-1 stop-instances --instance-ids $INSTANCE_ID
+                            echo Instance $INSTANCE_ID Stopped
+                        '''
+                    }
+                }
+            }
+        }
+    }

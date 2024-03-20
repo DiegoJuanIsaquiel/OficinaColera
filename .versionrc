@@ -1,0 +1,8 @@
+{
+  "files": [
+    "package.json",
+    "package-lock.json",
+    "src/environments/version.ts"
+  ],
+  "versionCode": 1
+}

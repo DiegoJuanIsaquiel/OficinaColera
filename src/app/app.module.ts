@@ -1,0 +1,94 @@
+import { registerLocaleData } from '@angular/common';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+// eslint-disable-next-line import/no-unresolved
+import ptBr from '@angular/common/locales/pt';
+import { LOCALE_ID, NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NbRoleProvider, NbSecurityModule } from '@nebular/security';
+import { NbMenuModule, NbSidebarModule, NbToastrModule } from '@nebular/theme';
+import { environment } from '../environments/environment';
+import { CoreModule } from './@core/core.module';
+import { ThemeModule } from './@theme/theme.module';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { HttpAsyncModule } from './modules/http-async/http-async.module';
+import { BaseUrlInterceptor } from './modules/http-async/interceptors/base-url.interceptor';
+import { BearerTokenInterceptor } from './modules/http-async/interceptors/bearer-token.interceptor';
+import { HttpAsyncHeadersInterceptor } from './modules/http-async/interceptors/http-async-headers.interceptor';
+import { RefreshTokenInterceptor } from './modules/http-async/interceptors/refresh-token.interceptor';
+import { RetryInterceptor } from './modules/http-async/interceptors/retry.interceptor';
+import { IsOfflineInterceptor } from './modules/network/interceptors/is-offline.interceptor';
+import { NetworkModule } from './modules/network/network.module';
+import { RoleService } from './services/role/role.service';
+
+registerLocaleData(ptBr);
+
+@NgModule({
+  declarations: [
+    AppComponent,
+  ],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    HttpClientModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NbToastrModule.forRoot({
+      duration: 5000,
+      destroyByClick: true,
+      limit: 3,
+    }),
+    NbSidebarModule.forRoot(),
+    NbMenuModule.forRoot(),
+    CoreModule.forRoot(),
+    ThemeModule.forRoot(),
+    HttpAsyncModule.withConfig({
+      baseUrl: environment.api.baseUrl,
+      defaultHeaders: {
+        ['Accept']: 'application/json',
+        ['Content-Type']: 'application/json',
+      },
+      bearerTokenKey: environment.keys.token,
+    }),
+    NbSecurityModule.forRoot({
+      accessControl: {
+        none: {
+          view: [],
+          update: [],
+          create: [],
+          remove: [],
+        },
+        user: {
+          view: [],
+          update: [],
+          create: [],
+          remove: [],
+        },
+        admin: {
+          view: '*',
+          create: '*',
+          remove: '*',
+          update: '*',
+        },
+      },
+    }),
+    NetworkModule,
+  ],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'pt' },
+    { provide: HTTP_INTERCEPTORS, useClass: IsOfflineInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: BaseUrlInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpAsyncHeadersInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: BearerTokenInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: RefreshTokenInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: RetryInterceptor, multi: true },
+    { provide: NbRoleProvider, useClass: RoleService },
+  ],
+  bootstrap: [
+    AppComponent,
+  ],
+})
+export class AppModule {}
